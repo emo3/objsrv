@@ -1,0 +1,57 @@
+export BYPASS_PRS=True
+rm   -f <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# DSH=Dashboard Application Services Hub in JazzSM
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh DSH
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# ESS=Security Services in JazzSM
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh ESS
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# FAS=Administration Services in JazzSM
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh FAS
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# FRS=Registry Services in JazzSM
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh FRS
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NCM=Tivoli Netcool Configuration Manager
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NCM
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NOA=Tivoli Netcool/OMNIbus Administration GUI Components
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NOA
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NOC=Tivoli Netcool/OMNIbus All Components
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NOC
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NOD=Tivoli Netcool/OMNIbus Desktop Components
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NOD
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NOP=Tivoli Netcool/OMNIbus Probe and Gateway Support Components
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NOP
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NOS=Tivoli Netcool/OMNIbus Server Components
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NOS
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NOW=Tivoli Netcool/OMNIbus Web GUI
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NOW
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# NPA=Tivoli Netcool/OMNIbus Process Agent Components
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh NPA
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# ODP=Common prerequisites in JazzSM
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh ODP
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# PAD=IBM DB2 Enterprise Server Edition
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh PAD
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# PAM=IBM Maximo Asset Management
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh PAM
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# PAW=IBM Tivoli Process Automation suite configuration tool for WebSphere Application Server
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh PAW
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# TCR=Tivoli Common Reporting
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh TCR
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+# TIP=Tivoli Integrated Portal
+<%= node['objsrv']['temp_dir'] %>/prereq_checker.sh TIP
+cat <%= node['objsrv']['temp_dir'] %>/result.txt >> <%= node['objsrv']['temp_dir'] %>/all_results.txt
+grep FAIL <%= node['objsrv']['temp_dir'] %>/all_results.txt

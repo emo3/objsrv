@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<agent-input clean='true' temporary='true'>
+  <variables>
+    <variable name='sharedLocation' value='<%= node['objsrv']['app_dir'] %>/IBMIMShared'/>
+    <!-- Installation location for: -->
+    <!--   IBM Tivoli Netcool/OMNIbus -->
+    <!--   Netcool/OMNIbus Gateway nco-g-bmc-remedy -->
+    <!--   Netcool/OMNIbus Gateway nco-g-java -->
+    <!--   Netcool/OMNIbus Gateway nco-g-jdbc -->
+    <!--   Netcool/OMNIbus Gateway nco-g-jdbc-reporting-scripts -->
+    <variable name='installLocation' value='<%= node['objsrv']['app_dir'] %>/netcool8'/>
+  </variables>
+  <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='${sharedLocation}'/>
+  <server>
+    <repository location='file:<%= node['objsrv']['media_dir'] %>/miscgates81/Im-nco-g-bmc-remedy-3_0/'/>
+    <repository location='file:<%= node['objsrv']['media_dir'] %>/miscgates81/Im-nco-g-java-5_0/'/>
+    <repository location='file:<%= node['objsrv']['media_dir'] %>/gateways81/nco-g-jdbc_6_0/'/>
+    <repository location='file:<%= node['objsrv']['media_dir'] %>/gateways81/nco-g-jdbc-reporting-scripts_1_0/'/>
+  </server>
+  <profile id='IBM Tivoli Netcool OMNIbus' installLocation='${installLocation}'>
+    <!-- Data for IBM Tivoli Netcool/OMNIbus: -->
+    <!-- Migrate OMNIbus data -->
+    <data key='user.migratedata,com.ibm.tivoli.omnibus.core' value='false'/>
+  </profile>
+  <install>
+    <!-- Netcool/OMNIbus Gateway nco-g-bmc-remedy 1.3.0.0 -->
+    <offering profile='IBM Tivoli Netcool OMNIbus' id='com.ibm.tivoli.omnibus.integrations.nco-g-bmc-remedy' version='1.3.0.3' features='nco-g-bmc-remedy'/>
+    <!-- Netcool/OMNIbus Gateway nco-g-java 1.5.0.0 -->
+    <offering profile='IBM Tivoli Netcool OMNIbus' id='com.ibm.tivoli.omnibus.integrations.nco-g-java' version='1.5.0.0' features='nco-g-java'/>
+    <!-- Netcool/OMNIbus Gateway nco-g-jdbc 1.6.0.0 -->
+    <offering profile='IBM Tivoli Netcool OMNIbus' id='com.ibm.tivoli.omnibus.integrations.nco-g-jdbc' version='1.6.0.4' features='nco-g-jdbc'/>
+    <!-- Netcool/OMNIbus Gateway nco-g-jdbc-reporting-scripts 1.1.0.0 -->
+    <offering profile='IBM Tivoli Netcool OMNIbus' id='com.ibm.tivoli.omnibus.integrations.nco-g-jdbc-reporting-scripts' version='1.1.0.2' features='nco-g-jdbc-reporting-scripts'/>
+  </install>
+</agent-input>
