@@ -1,5 +1,4 @@
-# Install RPM's
-package node['objsrv']['rhel']
+include_recipe '::fix_objsrv'
 
 # Download the prs file
 remote_file "#{node['objsrv']['temp_dir']}/#{node['objsrv']['prs']}" do
@@ -31,8 +30,15 @@ template '/tmp/run_prs.sh' do
   mode 0755
 end
 
-execute 'run prs' do
-  command 'sh /tmp/run_prs.sh'
+bash 'run prs' do
+  cwd '/tmp'
+  code <<-EOH
+# setup NTP
+systemctl start ntpd
+systemctl enable ntpd
+systemctl status ntpd
+sh /tmp/run_prs.sh
+EOH
 end
 
 selinux_state 'SELinux Enforcing' do

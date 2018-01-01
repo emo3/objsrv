@@ -11,4 +11,4 @@ default['objsrv']['install_dir'] = "#{node['objsrv']['media_dir']}/nco81"
 default['objsrv']['fp_dir']      = "#{node['objsrv']['media_dir']}/nco81fp"
 default['objsrv']['temp_dir']    = '/tmp'
 default['objsrv']['media_url']   = 'http://10.1.1.30/media'
-default['objsrv']['rhel']        = %w(bc ntp firefox libstdc++.i686)
+default['objsrv']['rhel']        = %w(bc ntp firefox compat-libstdc++-33.i686)

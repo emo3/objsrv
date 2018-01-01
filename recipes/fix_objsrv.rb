@@ -18,14 +18,14 @@ end
 set_limit '*' do
   type 'hard'
   item 'nofile'
-  value unlimited
+  value 33000
   use_system true
 end
 
 set_limit '*' do
   type 'soft'
   item 'nofile'
-  value unlimited
+  value 33000
   use_system true
 end
 
@@ -33,14 +33,14 @@ end
 set_limit '*' do
   type 'hard'
   item 'core'
-  value unlimited
+  value 390001
   use_system true
 end
 
 set_limit '*' do
   type 'soft'
   item 'core'
-  value unlimited
+  value 390001
   use_system true
 end
 # end PRS Section
