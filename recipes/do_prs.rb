@@ -37,7 +37,7 @@ bash 'run prs' do
 systemctl start ntpd
 systemctl enable ntpd
 systemctl status ntpd
-sh /tmp/run_prs.sh
+/tmp/run_prs.sh
 EOH
 end
 
