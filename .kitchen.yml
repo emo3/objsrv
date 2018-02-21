@@ -7,7 +7,7 @@ driver:
     cpus: 1
     name: objsrv
   network:
-   - ['private_network', ip: '10.1.1.50']
+   - ['private_network', ip: <%= ENV['OSP'] %>]
 
 provisioner:
   name: chef_zero
