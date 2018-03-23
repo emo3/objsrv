@@ -25,8 +25,8 @@ platforms:
 suites:
   - name: objsrv
     run_list:
-      - recipe[objsrv::do_prs]
-#      - recipe[objsrv::install_nco81]
+#      - recipe[objsrv::do_prs]
+      - recipe[objsrv::install_nco81]
     verifier:
       inspec_tests:
         - test/smoke/default
