@@ -8,14 +8,14 @@
     <!--   Netcool/OMNIbus Gateway nco-g-java -->
     <!--   Netcool/OMNIbus Gateway nco-g-jdbc -->
     <!--   Netcool/OMNIbus Gateway nco-g-jdbc-reporting-scripts -->
-    <variable name='installLocation' value='<%= node['objsrv']['app_dir'] %>/netcool8'/>
+    <variable name='installLocation' value='<%= node['objsrv']['nc_dir'] %>'/>
   </variables>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='${sharedLocation}'/>
   <server>
-    <repository location='file:<%= node['objsrv']['media_dir'] %>/miscgates81/Im-nco-g-bmc-remedy-3_0/'/>
-    <repository location='file:<%= node['objsrv']['media_dir'] %>/miscgates81/Im-nco-g-java-5_0/'/>
-    <repository location='file:<%= node['objsrv']['media_dir'] %>/gateways81/nco-g-jdbc_6_0/'/>
-    <repository location='file:<%= node['objsrv']['media_dir'] %>/gateways81/nco-g-jdbc-reporting-scripts_1_0/'/>
+    <repository location='file:<%= node['objsrv']['gate_dir'] %>/Im-nco-g-bmc-remedy-3_0/'/>
+    <repository location='file:<%= node['objsrv']['gate_dir'] %>/Im-nco-g-java-5_0/'/>
+    <repository location='file:<%= node['objsrv']['gate_dir'] %>/nco-g-jdbc_6_0/'/>
+    <repository location='file:<%= node['objsrv']['gate_dir'] %>/nco-g-jdbc-reporting-scripts_1_0/'/>
   </server>
   <profile id='IBM Tivoli Netcool OMNIbus' installLocation='${installLocation}'>
     <!-- Data for IBM Tivoli Netcool/OMNIbus: -->

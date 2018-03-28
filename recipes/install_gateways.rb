@@ -1,7 +1,4 @@
-# remove when you do not need any X11 stuff
-include_recipe '::add_x11'
-
-# Create the dir's that are needed by netcool update
+# Create the dir's that are needed by netcool gateways
 directory node['objsrv']['fp_dir'] do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']

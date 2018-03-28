@@ -4,9 +4,9 @@
     <variable name='sharedLocation' value='<%= node['objsrv']['app_dir'] %>/IBMIMShared'/>
   </variables>
   <server>
-    <repository location='<%= node['objsrv']['media_dir'] %>/nco81/OMNIbusRepository'/>
+    <repository location='<%= node['objsrv']['install_dir'] %>/OMNIbusRepository'/>
   </server>
-  <profile id='IBM Tivoli Netcool OMNIbus' installLocation='<%= node['objsrv']['app_dir'] %>/netcool'>
+  <profile id='IBM Tivoli Netcool OMNIbus' installLocation='<%= node['objsrv']['nc_dir'] %>'>
     <data key='cic.selector.arch' value='x86_64'/>
     <data key='user.migratedata,com.ibm.tivoli.omnibus.core' value='false'/>
   </profile>
