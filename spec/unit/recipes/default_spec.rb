@@ -6,7 +6,7 @@
 
 require 'spec_helper'
 
-describe 'objsrv::install_nco81' do
+describe 'objsrv::make_nco81' do
   context 'When all attributes are default, on an Redhat 7.4' do
     let(:chef_run) do
       # for a complete list of available platforms and versions see:
