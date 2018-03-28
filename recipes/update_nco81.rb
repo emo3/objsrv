@@ -60,9 +60,9 @@ template '/etc/profile.d/nco.sh' do
 end
 
 # Download the java security file
-remote_file "#{node['objsrv']['temp_dir']}/java.security" do
+remote_file "#{Chef::Config[:file_cache_path]}/java.security" do
   source "#{node['objsrv']['media_url']}/java.security"
-  not_if { File.exist?("#{node['objsrv']['temp_dir']}/java.security") }
+  not_if { File.exist?("#{Chef::Config[:file_cache_path]}/java.security") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'

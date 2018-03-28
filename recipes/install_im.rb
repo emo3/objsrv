@@ -5,12 +5,18 @@ end
 
 # create netcool admin account
 user node['objsrv']['nc_act'] do
-  group node['objsrv']['nc_grp']
-  group 'vagrant'
+  gid node['objsrv']['nc_grp']
   shell '/bin/bash'
   password node['objsrv']['nc_pwd']
   manage_home true
   action :create
+end
+
+# Add group vagrant to netcool account
+group 'vagrant' do
+  members node['objsrv']['nc_act']
+  action :modify
+  append true
 end
 
 # Download the object server package file
