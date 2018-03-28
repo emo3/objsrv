@@ -19,11 +19,19 @@ group 'vagrant' do
   append true
 end
 
+# Create the dir's that are needed by installation Manager
+directory node['objsrv']['im_dir'] do
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  recursive true
+  mode '0755'
+end
+
 # Download the object server package file
-remote_file "#{node['objsrv']['temp_dir']}/#{node['objsrv']['im_pkg']}" do
+remote_file "#{node['objsrv']['im_dir']}/#{node['objsrv']['im_pkg']}" do
   source "#{node['objsrv']['media_url']}/#{node['objsrv']['im_pkg']}"
-  not_if { File.exist?("#{node['objsrv']['temp_dir']}/#{node['objsrv']['im_pkg']}") }
-  not_if { File.exist?("#{node['objsrv']['temp_dir']}/userinstc") }
+  not_if { File.exist?("#{node['objsrv']['im_dir']}/#{node['objsrv']['im_pkg']}") }
+  not_if { File.exist?("#{node['objsrv']['im_dir']}/userinstc") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'
@@ -32,9 +40,9 @@ end
 
 # unzip the object server package file
 execute 'unzip_package' do
-  command "unzip -q #{node['objsrv']['temp_dir']}/#{node['objsrv']['im_pkg']}"
-  cwd node['objsrv']['temp_dir']
-  not_if { File.exist?("#{node['objsrv']['temp_dir']}/userinstc") }
+  command "unzip -q #{node['objsrv']['im_dir']}/#{node['objsrv']['im_pkg']}"
+  cwd node['objsrv']['im_dir']
+  not_if { File.exist?("#{node['objsrv']['im_dir']}/userinstc") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'
@@ -52,12 +60,12 @@ end
 
 # Install Installation Manager
 execute 'install_im' do
-  command "#{node['objsrv']['temp_dir']}/userinstc \
+  command "#{node['objsrv']['im_dir']}/userinstc \
   -acceptlicense \
   -accessRights nonAdmin \
   -installationDirectory #{node['objsrv']['app_dir']}/InstallationManager \
   -log #{node['objsrv']['temp_dir']}/install-im_log.xml"
-  cwd node['objsrv']['temp_dir']
+  cwd node['objsrv']['im_dir']
   not_if { File.exist?("#{node['objsrv']['app_dir']}/InstallationManager/eclipse/IBMIM") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
@@ -65,8 +73,9 @@ execute 'install_im' do
   action :run
 end
 
-file "#{node['objsrv']['temp_dir']}/#{node['objsrv']['im_pkg']}" do
+directory node['objsrv']['im_dir'] do
   only_if { File.exist?("#{node['objsrv']['app_dir']}/InstallationManager/eclipse/IBMIM") }
+  recursive true
   action :delete
 end
 

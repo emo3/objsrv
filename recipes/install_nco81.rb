@@ -1,9 +1,3 @@
-include_recipe '::filesystem'
-include_recipe '::fix_objsrv'
-include_recipe '::install_im'
-# remove when you do not need any X11 stuff
-# include_recipe '::add_x11'
-
 # Create the dir's that are needed by netcool
 directory node['objsrv']['install_dir'] do
   user node['objsrv']['nc_act']
@@ -57,10 +51,12 @@ execute 'install_netcool' do
 end
 
 file "#{node['objsrv']['temp_dir']}/install_sf_nc81.xml" do
+  only_if { File.exist?("#{node['objsrv']['app_dir']}/netcool/bin/nco_id") }
   action :delete
 end
 
 directory node['objsrv']['install_dir'] do
+  only_if { File.exist?("#{node['objsrv']['app_dir']}/netcool/bin/nco_id") }
   recursive true
   action :delete
 end
@@ -99,8 +95,3 @@ end
 file "#{node['objsrv']['temp_dir']}/java.security" do
   action :delete
 end
-
-# Update Netcool to latest fix pack
-include_recipe '::update_nco81'
-# install the netcool gateways
-include_recipe '::install_gateways'

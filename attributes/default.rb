@@ -15,6 +15,7 @@ default['objsrv']['install_dir'] = "#{node['objsrv']['media_dir']}/nco81"
 default['objsrv']['fp_dir']      = "#{node['objsrv']['media_dir']}/nco81fp"
 default['objsrv']['gate_dir']    = "#{node['objsrv']['media_dir']}/gateways"
 default['objsrv']['temp_dir']    = '/tmp'
+default['objsrv']['im_dir']      = '/tmp/im'
 default['objsrv']['media_url']   = 'http://10.1.1.30/media'
 default['objsrv']['rhel']        = %w(bc ntp firefox libXtst compat-libstdc++-33.i686)
 # default['objsrv']['rhel']        = %w(bc ntp firefox compat-libstdc++-33.i686 libXtst.i686 compat-libstdc++-33 compat-db libXp libXmu libXtst pam libXft gtk2 xauth)
