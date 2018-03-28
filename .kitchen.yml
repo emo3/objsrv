@@ -27,6 +27,7 @@ suites:
     run_list:
 #      - recipe[objsrv::do_prs]
       - recipe[objsrv::install_nco81]
+      - recipe[objsrv::add_x11]
     verifier:
       inspec_tests:
         - test/smoke/default

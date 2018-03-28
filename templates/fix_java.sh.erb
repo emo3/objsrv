@@ -1,0 +1,9 @@
+# Configure JRE to work with FIPS 140-2 encryption
+mv <%= node['objsrv']['app_dir'] %>/netcool/platform/linux2x86/jre64_1.7.0/jre/lib/security/java.security \
+<%= node['objsrv']['app_dir'] %>/netcool/platform/linux2x86/jre64_1.7.0/jre/lib/security/java.security.orig
+mv <%= node['objsrv']['app_dir'] %>/netcool/platform/linux2x86/jre_1.7.0/jre/lib/security/java.security \
+<%= node['objsrv']['app_dir'] %>/netcool/platform/linux2x86/jre_1.7.0/jre/lib/security/java.security.orig
+cp /tmp/java.security \
+<%= node['objsrv']['app_dir'] %>/netcool/platform/linux2x86/jre64_1.7.0/jre/lib/security/java.security
+cp /tmp/java.security \
+<%= node['objsrv']['app_dir'] %>/netcool/platform/linux2x86/jre_1.7.0/jre/lib/security/java.security

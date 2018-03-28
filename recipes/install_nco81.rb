@@ -48,6 +48,9 @@ execute 'install_netcool' do
   input /tmp/install_sf_nc81.xml \
   -log /tmp/install-nc81_log.xml \
   -acceptLicense"
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  umask '022'
   action :run
 end
 
@@ -56,19 +59,29 @@ template '/etc/profile.d/nco.sh' do
   mode 0755
 end
 
-bash 'Configure_JRE' do
-  cwd '/tmp'
-  code <<-EOH
-# Configure JRE to work with FIPS 140-2 encryption
-mv $TIVHOME/netcool/platform/linux2x86/jre64_1.7.0/jre/lib/security/java.security \
-$TIVHOME/netcool/platform/linux2x86/jre64_1.7.0/jre/lib/security/java.security.orig
-mv $TIVHOME/netcool/platform/linux2x86/jre_1.7.0/jre/lib/security/java.security \
-$TIVHOME/netcool/platform/linux2x86/jre_1.7.0/jre/lib/security/java.security.orig
-cp /tmp/java.security \
-$TIVHOME/netcool/platform/linux2x86/jre64_1.7.0/jre/lib/security/java.security
-cp /tmp/java.security \
-$TIVHOME/netcool/platform/linux2x86/jre_1.7.0/jre/lib/security/java.security
-sync
-$TIVHOME/InstallationManager/eclipse/tools/imcl listInstalledPackages -features -long
-EOH
+# Download the java security file
+remote_file "#{Chef::Config[:file_cache_path]}/java.security" do
+  source "#{node['objsrv']['media_url']}/java.security"
+  not_if { File.exist?("#{Chef::Config[:file_cache_path]}/java.security") }
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode '0755'
+  action :create
+end
+
+template '/tmp/fix_java.sh' do
+  source 'fix_java.sh.erb'
+  mode 0755
+end
+
+execute 'Configure_JRE' do
+  command '/tmp/fix_java.sh'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  action :run
+end
+
+template '/tmp/list_apps.sh' do
+  source 'list_apps.sh.erb'
+  mode 0755
 end
