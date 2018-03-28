@@ -3,7 +3,7 @@ include_recipe '::fix_objsrv'
 # include_recipe '::create_nc_acct'
 include_recipe '::install_im'
 
-# Create the dir's that are needed by apm
+# Create the dir's that are needed by netcool
 directory node['objsrv']['install_dir'] do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
@@ -38,20 +38,24 @@ file "#{node['objsrv']['install_dir']}/#{node['objsrv']['package']}" do
   action :delete
 end
 
-template '/tmp/install_sf_nc81.xml' do
+template "#{node['objsrv']['temp_dir']}/install_sf_nc81.xml" do
   source 'install_sf_nc81.xml.erb'
   mode 0755
 end
 
 execute 'install_netcool' do
   command "#{node['objsrv']['app_dir']}/InstallationManager/eclipse/tools/imcl \
-  input /tmp/install_sf_nc81.xml \
-  -log /tmp/install-nc81_log.xml \
+  input #{node['objsrv']['temp_dir']}/install_sf_nc81.xml \
+  -log #{node['objsrv']['temp_dir']}/install-nc81_log.xml \
   -acceptLicense"
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'
   action :run
+end
+
+file "#{node['objsrv']['temp_dir']}/install_sf_nc81.xml" do
+  action :delete
 end
 
 template '/etc/profile.d/nco.sh' do
@@ -69,14 +73,18 @@ remote_file "#{node['objsrv']['temp_dir']}/java.security" do
   action :create
 end
 
-template '/tmp/fix_java.sh' do
+template "#{node['objsrv']['temp_dir']}/fix_java.sh" do
   source 'fix_java.sh.erb'
   mode 0755
 end
 
 execute 'Configure_JRE' do
-  command '/tmp/fix_java.sh'
+  command "#{node['objsrv']['temp_dir']}/fix_java.sh"
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   action :run
+end
+
+file "#{node['objsrv']['temp_dir']}/fix_java.sh" do
+  action :delete
 end

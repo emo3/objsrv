@@ -56,7 +56,7 @@ execute 'install_im' do
   -acceptlicense \
   -accessRights nonAdmin \
   -installationDirectory #{node['objsrv']['app_dir']}/InstallationManager \
-  -log /tmp/install-im_log.xml"
+  -log #{node['objsrv']['temp_dir']}/install-im_log.xml"
   cwd node['objsrv']['temp_dir']
   not_if { File.exist?("#{node['objsrv']['app_dir']}/InstallationManager/eclipse/IBMIM") }
   user node['objsrv']['nc_act']
