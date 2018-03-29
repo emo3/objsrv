@@ -1,4 +1,4 @@
-<%= node['objsrv']['media_dir'] %><?xml version='1.0' encoding='UTF-8'?>
+<?xml version='1.0' encoding='UTF-8'?>
 <agent-input clean='true' temporary='true'>
   <variables>
     <variable name='sharedLocation' value='<%= node['objsrv']['app_dir'] %>/IBMIMShared'/>
@@ -7,7 +7,7 @@
   </variables>
   <preference name='com.ibm.cic.common.core.preferences.eclipseCache' value='${sharedLocation}'/>
   <server>
-    <repository location='file:<%= node['objsrv']['media_dir'] %>/nckl/'/>
+    <repository location='file:<%= node['objsrv']['nckl_dir'] %>'/>
   </server>
   <profile id='IBM Netcool Knowledge Library' installLocation='${installLocation.IBM_Netcool_Knowledge_Library}'>
     <data key='cic.selector.arch' value='x86_64'/>

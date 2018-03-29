@@ -2,6 +2,7 @@
 directory node['objsrv']['fp_dir'] do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
+  not_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/etc/default/update81fp13to81fp15.sql") }
   recursive true
   mode '0755'
 end
@@ -29,12 +30,8 @@ execute 'unzip_fp_package' do
   action :run
 end
 
-file "#{node['objsrv']['fp_dir']}/#{node['objsrv']['fp_pkg']}" do
-  only_if { File.exist?("#{node['objsrv']['fp_dir']}/update_gui.sh") }
-  action :delete
-end
-
 template "#{node['objsrv']['temp_dir']}/update_sf_nc81fp.xml" do
+  not_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/etc/default/update81fp13to81fp15.sql") }
   source 'update_sf_nc81fp.xml.erb'
   mode 0755
 end

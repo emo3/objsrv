@@ -1,3 +1,9 @@
+# make sure we have the latest RHEL versions
+execute 'update_RHEL' do
+  command 'yum -y -q update'
+  action :run
+end
+
 #######################################
 # The following was taken from the PreRequisite Scanner
 # begin PRS Section
@@ -68,3 +74,12 @@ set_limit '*' do
 end
 # end PRS Section
 #######################################
+
+# This is so PAD can read shadow file
+file '/etc/shadow' do
+  mode '0400'
+end
+
+service 'ntpd' do
+  action [:enable, :start]
+end

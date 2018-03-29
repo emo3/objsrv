@@ -1,53 +1,55 @@
-# remove when you do not need any X11 stuff
-include_recipe '::add_x11'
-
-# Create the dir's that are needed by netcool update
-directory node['objsrv']['fp_dir'] do
+# Create the dir's that are needed by netcool knowledge library
+directory node['objsrv']['nckl_dir'] do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   recursive true
   mode '0755'
 end
 
-# Download the object server fix pack file
-remote_file "#{node['objsrv']['fp_dir']}/#{node['objsrv']['fp_pkg']}" do
-  source "#{node['objsrv']['media_url']}/#{node['objsrv']['fp_pkg']}"
-  not_if { File.exist?("#{node['objsrv']['fp_dir']}/#{node['objsrv']['fp_pkg']}") }
-  # not_if { File.exist?("#{node['objsrv']['install_dir']}/install_gui.sh") }
+# Download the netcool knowledge library
+remote_file "#{node['objsrv']['nckl_dir']}/NcKL_4.6-im.zip" do
+  source "#{node['objsrv']['media_url']}/NcKL_4.6-im.zip"
+  not_if { File.exist?("#{node['objsrv']['nckl_dir']}/NcKL_4.6-im.zip") }
+  not_if { File.exist?("#{node['objsrv']['nckl_dir']}/repository.xml") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'
   action :create
 end
 
-# unzip the object server fix pack file
-execute 'unzip_fp_package' do
-  command "unzip -q #{node['objsrv']['fp_dir']}/#{node['objsrv']['fp_pkg']}"
-  cwd node['objsrv']['fp_dir']
-  # not_if { File.exist?("#{node['objsrv']['install_dir']}/install_gui.sh") }
+# unzip the netcool knowledge library
+execute 'unzip_nckl' do
+  command "unzip -q #{node['objsrv']['nckl_dir']}/NcKL_4.6-im.zip"
+  cwd node['objsrv']['nckl_dir']
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'
   action :run
 end
 
-file "#{node['objsrv']['fp_dir']}/#{node['objsrv']['fp_pkg']}" do
-  # only_if { File.exist?("#{node['objsrv']['install_dir']}/install_gui.sh") }
-  action :nothing
-end
-
-template "#{node['objsrv']['temp_dir']}/update_sf_nc81fp.xml" do
-  source 'update_sf_nc81fp.xml.erb'
+template "#{node['objsrv']['temp_dir']}/install_product-nckl.xml" do
+  source 'install_sf_nckl.xml.erb'
   mode 0755
 end
 
-execute 'update_netcool' do
+# install the netcool knowledge library
+execute 'install_nckl' do
   command "#{node['objsrv']['app_dir']}/InstallationManager/eclipse/tools/imcl \
-  input #{node['objsrv']['temp_dir']}/update_sf_nc81fp.xml \
-  -log #{node['objsrv']['temp_dir']}/update-nc81_log.xml \
+  input #{node['objsrv']['temp_dir']}/install_product-nckl.xml \
+  -log #{node['objsrv']['temp_dir']}/install-nckl_log.xml \
   -acceptLicense"
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'
   action :run
+end
+
+file "#{node['objsrv']['temp_dir']}/install_product-nckl.xml" do
+  action :nothing
+end
+
+# remove temporary netcool knowledge library
+directory node['objsrv']['nckl_dir'] do
+  recursive true
+  action :nothing
 end

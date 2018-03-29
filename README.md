@@ -49,7 +49,7 @@ depends 'objsrv'
 Then, in a recipe:
 
 ```
-include_recipe 'objsrv::fix_apm'
+include_recipe 'objsrv::fix_netcool'
 ```
 
 If your cookbook provides resources, be sure to include examples of how to use

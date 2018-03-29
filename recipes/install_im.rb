@@ -19,10 +19,18 @@ group 'vagrant' do
   append true
 end
 
+# Add netcool admin group account to root
+group node['objsrv']['nc_grp'] do
+  members 'root'
+  action :modify
+  append true
+end
+
 # Create the dir's that are needed by installation Manager
 directory node['objsrv']['im_dir'] do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
+  not_if { File.exist?("#{node['objsrv']['app_dir']}/InstallationManager/eclipse/IBMIM") }
   recursive true
   mode '0755'
 end
@@ -32,6 +40,7 @@ remote_file "#{node['objsrv']['im_dir']}/#{node['objsrv']['im_pkg']}" do
   source "#{node['objsrv']['media_url']}/#{node['objsrv']['im_pkg']}"
   not_if { File.exist?("#{node['objsrv']['im_dir']}/#{node['objsrv']['im_pkg']}") }
   not_if { File.exist?("#{node['objsrv']['im_dir']}/userinstc") }
+  not_if { File.exist?("#{node['objsrv']['app_dir']}/InstallationManager/eclipse/IBMIM") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'
@@ -43,6 +52,7 @@ execute 'unzip_package' do
   command "unzip -q #{node['objsrv']['im_dir']}/#{node['objsrv']['im_pkg']}"
   cwd node['objsrv']['im_dir']
   not_if { File.exist?("#{node['objsrv']['im_dir']}/userinstc") }
+  not_if { File.exist?("#{node['objsrv']['app_dir']}/InstallationManager/eclipse/IBMIM") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'

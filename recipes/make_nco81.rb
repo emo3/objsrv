@@ -11,4 +11,6 @@ include_recipe '::add_x11'
 # Update Netcool to latest fix pack
 include_recipe '::update_nco81'
 # install the netcool gateways
-# include_recipe '::install_gateways'
+include_recipe '::install_gateways'
+# install the netcool knowledge library
+include_recipe '::install_nckl'
