@@ -1,0 +1,54 @@
+#
+# omni.dat file as prototype for interfaces file
+#
+# Ident: $Id: omni.dat 1.5 1999/07/13 09:34:20 chris Development $
+#
+## Define the Process Agent(s)
+# Object Server Process Agent
+[$OPAN]
+{
+  Primary:  $OS  $PAP
+}
+
+# Probe Server Process Agent
+[$PPAN]
+{
+  Primary:  $PS  $PAP
+}
+
+## Define the Object Server(s)
+# Object Server
+[$NCOMS]
+{
+  Primary:  $OS  $POS
+}
+
+# Primary Object Server
+[$NPOS]
+{
+  Primary:  $OS  $POS
+}
+
+[$BOSN]
+{
+  Primary:  $OS  $POS
+}
+
+# Define the Gateway(s)
+# Bi Directional Gateway to connect to Backup Object Server
+[$BGN]
+{
+  Primary:  $OS  $BIP
+}
+
+# Remedy Gateway - Ticketing
+[$RGN]
+{
+  Primary:  $OS  $RGP
+}
+
+# Tivoli Data Warehouse Gateway - Reporting
+[$TGN]
+{
+  Primary:  $OS  $TWP
+}
