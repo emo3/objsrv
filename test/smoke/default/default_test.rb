@@ -1,6 +1,6 @@
 # # encoding: utf-8
 
-# Inspec test for recipe objsrv::install_nco81
+# Inspec test for recipe objsrv::make_nco81
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at http://inspec.io/docs/reference/resources/
