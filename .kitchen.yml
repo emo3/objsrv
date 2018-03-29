@@ -1,11 +1,10 @@
 ---
 driver:
   name: vagrant
-  vm_hostname: objsrv
   customize:
-    memory: 4096
-    cpus: 1
-    name: objsrv
+    memory: <%= ENV['OSR'] %>
+    cpus: <%= ENV['OSC'] %>
+    name: <%= ENV['OS'] %>
   network:
    - ['private_network', ip: <%= ENV['OSP'] %>]
 

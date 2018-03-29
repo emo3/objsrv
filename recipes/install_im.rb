@@ -88,8 +88,3 @@ directory node['objsrv']['im_dir'] do
   recursive true
   action :delete
 end
-
-template '/etc/profile.d/im.sh' do
-  source 'im.sh.erb'
-  mode 0755
-end

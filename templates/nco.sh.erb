@@ -1,3 +1,6 @@
+export TEMP=<%= node['objsrv']['temp_dir'] %>
+export TIVHOME=<%= node['objsrv']['app_dir'] %>
+export IMCL=$TIVHOME/InstallationManager/eclipse/tools/imcl
 export NCHOME=$TIVHOME/netcool
 export OMNIHOME=$NCHOME/omnibus
 export OMNILIB=$OMNIHOME/platform/linux2x86/lib64
@@ -7,3 +10,4 @@ export NC_RULES_HOME=$TIVHOME/netcool/rules
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$NCHOME/platform/linux2x86/lib64
 export PATH=$PATH:$NCHOME/bin:$OMNIHOME/bin:$OMNIHOME/probes
 export BYPASS_PRS=True
+alias listapps="$IMCL listInstalledPackages -features -long"
