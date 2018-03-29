@@ -14,3 +14,5 @@ include_recipe '::update_nco81'
 include_recipe '::install_gateways'
 # install the netcool knowledge library
 include_recipe '::install_nckl'
+# setup the netcool enviroment
+include_recipe '::setup_netcool'

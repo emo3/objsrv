@@ -5,50 +5,50 @@
 #
 ## Define the Process Agent(s)
 # Object Server Process Agent
-[$OPAN]
+[<%= node['objsrv']['os_pa_name'] %>]
 {
-  Primary:  $OS  $PAP
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['pa_port'] %>
 }
 
 # Probe Server Process Agent
-[$PPAN]
+[<%= node['objsrv']['ps_pa_name'] %>]
 {
-  Primary:  $PS  $PAP
+  Primary: <%= node['objsrv']['PS'] %> <%= node['objsrv']['pa_port'] %>
 }
 
 ## Define the Object Server(s)
 # Object Server
-[$NCOMS]
+[<%= node['objsrv']['ncoms'] %>]
 {
-  Primary:  $OS  $POS
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['os_port'] %>
 }
 
 # Primary Object Server
-[$NPOS]
+[<%= node['objsrv']['p-ncoms'] %>]
 {
-  Primary:  $OS  $POS
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['os_port'] %>
 }
 
-[$BOSN]
+[<%= node['objsrv']['b-ncoms'] %>]
 {
-  Primary:  $OS  $POS
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['os_port'] %>
 }
 
 # Define the Gateway(s)
 # Bi Directional Gateway to connect to Backup Object Server
-[$BGN]
+[<%= node['objsrv']['bi-name'] %>]
 {
-  Primary:  $OS  $BIP
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['bi_port'] %>
 }
 
 # Remedy Gateway - Ticketing
-[$RGN]
+[<%= node['objsrv']['remedy'] %>]
 {
-  Primary:  $OS  $RGP
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['remedy_port'] %>
 }
 
 # Tivoli Data Warehouse Gateway - Reporting
-[$TGN]
+[<%= node['objsrv']['tdw'] %>]
 {
-  Primary:  $OS  $TWP
+  Primary: <%= node['objsrv']['OS'] %> <%= node['objsrv']['tdw_port'] %>
 }

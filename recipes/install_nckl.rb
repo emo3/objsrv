@@ -21,6 +21,7 @@ end
 execute 'unzip_nckl' do
   command "unzip -q #{node['objsrv']['nckl_dir']}/NcKL_4.6-im.zip"
   cwd node['objsrv']['nckl_dir']
+  not_if { File.exist?("#{node['objsrv']['app_dir']}/NcKL/advcorr.sql") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'
@@ -29,6 +30,7 @@ end
 
 template "#{node['objsrv']['temp_dir']}/install_product-nckl.xml" do
   source 'install_sf_nckl.xml.erb'
+  not_if { File.exist?("#{node['objsrv']['app_dir']}/NcKL/advcorr.sql") }
   mode 0755
 end
 
@@ -38,6 +40,7 @@ execute 'install_nckl' do
   input #{node['objsrv']['temp_dir']}/install_product-nckl.xml \
   -log #{node['objsrv']['temp_dir']}/install-nckl_log.xml \
   -acceptLicense"
+  not_if { File.exist?("#{node['objsrv']['app_dir']}/NcKL/advcorr.sql") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   umask '022'
@@ -45,11 +48,11 @@ execute 'install_nckl' do
 end
 
 file "#{node['objsrv']['temp_dir']}/install_product-nckl.xml" do
-  action :nothing
+  action :delete
 end
 
 # remove temporary netcool knowledge library
 directory node['objsrv']['nckl_dir'] do
   recursive true
-  action :nothing
+  action :delete
 end
