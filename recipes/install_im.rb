@@ -7,7 +7,7 @@ end
 user node['objsrv']['nc_act'] do
   gid node['objsrv']['nc_grp']
   shell '/bin/bash'
-  password node['objsrv']['nc_pwd']
+  password node['objsrv']['nc_epwd']
   manage_home true
   action :create
 end

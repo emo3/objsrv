@@ -30,15 +30,15 @@ execute 'unzip_fp_package' do
   action :run
 end
 
-template "#{node['objsrv']['temp_dir']}/update_sf_nc81fp.xml" do
+template "#{node['objsrv']['temp_dir']}/update_nc81fp.xml" do
   not_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/etc/default/update81fp13to81fp15.sql") }
-  source 'update_sf_nc81fp.xml.erb'
+  source 'update_nc81fp.xml.erb'
   mode 0755
 end
 
 execute 'update_netcool' do
   command "#{node['objsrv']['app_dir']}/InstallationManager/eclipse/tools/imcl \
-  input #{node['objsrv']['temp_dir']}/update_sf_nc81fp.xml \
+  input #{node['objsrv']['temp_dir']}/update_nc81fp.xml \
   -log #{node['objsrv']['temp_dir']}/update-nc81_log.xml \
   -acceptLicense"
   not_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/etc/default/update81fp13to81fp15.sql") }
@@ -48,7 +48,7 @@ execute 'update_netcool' do
   action :run
 end
 
-file "#{node['objsrv']['temp_dir']}/update_sf_nc81fp.xml" do
+file "#{node['objsrv']['temp_dir']}/update_nc81fp.xml" do
   only_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/etc/default/update81fp13to81fp15.sql") }
   action :delete
 end

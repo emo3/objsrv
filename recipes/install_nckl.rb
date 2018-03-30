@@ -29,7 +29,7 @@ execute 'unzip_nckl' do
 end
 
 template "#{node['objsrv']['temp_dir']}/install_product-nckl.xml" do
-  source 'install_sf_nckl.xml.erb'
+  source 'install_nckl.xml.erb'
   not_if { File.exist?("#{node['objsrv']['app_dir']}/NcKL/advcorr.sql") }
   mode 0755
 end

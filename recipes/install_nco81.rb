@@ -31,15 +31,15 @@ execute 'unzip_package' do
   action :run
 end
 
-template "#{node['objsrv']['temp_dir']}/install_sf_nc81.xml" do
+template "#{node['objsrv']['temp_dir']}/install_nc81.xml" do
   not_if { File.exist?("#{node['objsrv']['app_dir']}/netcool/bin/nco_id") }
-  source 'install_sf_nc81.xml.erb'
+  source 'install_nc81.xml.erb'
   mode 0755
 end
 
 execute 'install_netcool' do
   command "#{node['objsrv']['app_dir']}/InstallationManager/eclipse/tools/imcl \
-  input #{node['objsrv']['temp_dir']}/install_sf_nc81.xml \
+  input #{node['objsrv']['temp_dir']}/install_nc81.xml \
   -log #{node['objsrv']['temp_dir']}/install-nc81_log.xml \
   -acceptLicense"
   not_if { File.exist?("#{node['objsrv']['app_dir']}/netcool/bin/nco_id") }
@@ -49,7 +49,7 @@ execute 'install_netcool' do
   action :run
 end
 
-file "#{node['objsrv']['temp_dir']}/install_sf_nc81.xml" do
+file "#{node['objsrv']['temp_dir']}/install_nc81.xml" do
   only_if { File.exist?("#{node['objsrv']['app_dir']}/netcool/bin/nco_id") }
   action :delete
 end

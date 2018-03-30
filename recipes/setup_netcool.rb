@@ -5,20 +5,9 @@ hostsfile_entry node['objsrv']['ps_ip'] do
   unique   true
 end
 
-# copy original omni.dat to backup name
-execute 'backup_objsrv' do
-  command "mv #{node['objsrv']['nc_dir']}/etc/omni.dat #{node['objsrv']['nc_dir']}/etc/omni.dat.orig"
-  cwd "#{node['objsrv']['nc_dir']}/etc"
-  not_if { File.exist?("#{node['objsrv']['nc_dir']}/etc/omni.dat.orig") }
-  user node['objsrv']['nc_act']
-  group node['objsrv']['nc_grp']
-  action :run
-end
-
 # create omni.dat via template
 template "#{node['objsrv']['nc_dir']}/etc/omni.dat" do
   source 'omni.dat.erb'
-  not_if { File.exist?("#{node['objsrv']['nc_dir']}/etc/omni.dat") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode 0664
@@ -52,4 +41,83 @@ execute 'create_objsrv' do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   action :run
+end
+
+# Download the password key file
+remote_file "#{node['objsrv']['ob_dir']}/etc/passwdkey.key" do
+  source "#{node['objsrv']['media_url']}/passwdkey.key"
+  not_if { File.exist?("#{node['objsrv']['ob_dir']}/etc/passwdkey.key") }
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode '0644'
+  action :create
+end
+
+# create ncoms property file
+template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['ncoms']}.props" do
+  source 'ncoms.props.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode 0444
+end
+
+# start the object server
+bash 'run_objsrv' do
+  cwd "#{node['objsrv']['ob_dir']}/bin"
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  code <<-EOH
+    #{node['objsrv']['ob_dir']}/bin/nco_objserv \
+    -name #{node['objsrv']['ncoms']} &
+    # Give time for the Object Server to come up completely
+    sleep 5
+  EOH
+  not_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  action :run
+end
+
+# create sql file to add user and password
+template "#{node['objsrv']['temp_dir']}/create_user.sql" do
+  source 'create_user.sql.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  sensitive true
+  mode 0444
+end
+
+# Create user netcool within Object Server
+execute 'create_netcool' do
+  command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
+  -server #{node['objsrv']['ncoms']} \
+  -user root \
+  -password '' \
+  -input #{node['objsrv']['temp_dir']}/create_user.sql"
+  action :run
+end
+
+file "#{node['objsrv']['temp_dir']}/create_user.sql" do
+  action :delete
+end
+
+# create sql file to change root password
+template "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
+  source 'set_rpwd.sql.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  sensitive true
+  mode 0444
+end
+
+# Change root password
+execute 'change_root' do
+  command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
+  -server #{node['objsrv']['ncoms']} \
+  -user root \
+  -password '' \
+  -input #{node['objsrv']['temp_dir']}/set_rpwd.sql"
+  action :run
+end
+
+file "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
+  action :delete
 end

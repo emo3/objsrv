@@ -51,7 +51,7 @@ end
 template "#{node['objsrv']['temp_dir']}/install_product-gateways81.xml" do
   not_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/gates/jdbc/default/jdbc.map") }
   not_if { File.exist?("#{node['objsrv']['nc_dir']}/omnibus/gates/bmc_remedy/default/bmc_remedy.map") }
-  source 'install_sf_gateways81.xml.erb'
+  source 'install_gateways81.xml.erb'
   mode 0755
 end
 
