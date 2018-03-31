@@ -183,14 +183,3 @@ template "#{node['objsrv']['ob_dir']}/verify_nc.sql" do
   group node['objsrv']['nc_grp']
   mode 0444
 end
-
-# verify netcool
-execute 'verify_netcool' do
-  command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
-  -server #{node['objsrv']['ncoms']} \
-  -user '#{node['objsrv']['nc_act']}' \
-  -password '#{node['objsrv']['nc_pwd']}' \
-  -input #{node['objsrv']['ob_dir']}/verify_nc.sql"
-  sensitive true
-  action :run
-end
