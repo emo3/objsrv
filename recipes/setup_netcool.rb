@@ -49,7 +49,7 @@ remote_file "#{node['objsrv']['ob_dir']}/etc/passwdkey.key" do
   not_if { File.exist?("#{node['objsrv']['ob_dir']}/etc/passwdkey.key") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  mode '0644'
+  mode 0440
   action :create
 end
 
@@ -82,7 +82,7 @@ template "#{node['objsrv']['temp_dir']}/create_user.sql" do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   sensitive true
-  mode 0444
+  mode 0440
 end
 
 # Create user netcool within Object Server
@@ -92,6 +92,7 @@ execute 'create_netcool' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/create_user.sql"
+  sensitive true
   action :run
 end
 
@@ -105,7 +106,7 @@ template "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   sensitive true
-  mode 0444
+  mode 0440
 end
 
 # Change root password
@@ -115,9 +116,81 @@ execute 'change_root' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/set_rpwd.sql"
+  sensitive true
   action :run
 end
 
 file "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
   action :delete
+end
+
+# This will stop the object server via nco_sql
+# create sql file to do shutdown
+template "#{node['objsrv']['temp_dir']}/shutdown.sql" do
+  source 'shutdown.sql.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  mode 0444
+end
+
+# shutdown object server
+execute 'shutdown_objsrv' do
+  command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
+  -server #{node['objsrv']['ncoms']} \
+  -user root \
+  -password '#{node['objsrv']['root_pwd']}' \
+  -input #{node['objsrv']['temp_dir']}/shutdown.sql"
+  only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  sensitive true
+  action :run
+end
+
+file "#{node['objsrv']['temp_dir']}/shutdown.sql" do
+  action :delete
+end
+
+# create configuration files for PA
+template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.conf" do
+  source 'nco_pa.conf.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode 0444
+end
+template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.props" do
+  source 'nco_pa.props.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode 0444
+end
+
+# create setup script for netcool applications
+template '/etc/init.d/nco' do
+  source 'nco.erb'
+  group node['objsrv']['nc_grp']
+  mode 0755
+end
+
+# add script to system configuration
+service 'nco' do
+  action [:enable, :start]
+end
+
+# create sql file to verify netcool
+template "#{node['objsrv']['ob_dir']}/verify_nc.sql" do
+  source 'verify_nc.sql.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode 0444
+end
+
+# verify netcool
+execute 'verify_netcool' do
+  command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
+  -server #{node['objsrv']['ncoms']} \
+  -user '#{node['objsrv']['nc_act']}' \
+  -password '#{node['objsrv']['nc_pwd']}' \
+  -input #{node['objsrv']['temp_dir']}/shutdown.sql"
+  sensitive true
+  action :run
 end
