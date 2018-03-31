@@ -190,7 +190,7 @@ execute 'verify_netcool' do
   -server #{node['objsrv']['ncoms']} \
   -user '#{node['objsrv']['nc_act']}' \
   -password '#{node['objsrv']['nc_pwd']}' \
-  -input #{node['objsrv']['temp_dir']}/shutdown.sql"
+  -input #{node['objsrv']['ob_dir']}/verify_nc.sql"
   sensitive true
   action :run
 end
