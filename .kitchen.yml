@@ -26,7 +26,7 @@ suites:
   - name: objsrv
     run_list:
 #      - recipe[objsrv::do_prs]
-      - recipe[objsrv::make_nco81]
+      - recipe[objsrv::make_nc_os]
     verifier:
       inspec_tests:
         - test/smoke/default

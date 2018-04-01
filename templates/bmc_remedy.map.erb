@@ -1,0 +1,70 @@
+#######################################################################
+#
+#       Licensed Materials - Property of IBM
+#
+#
+#
+#       (C) Copyright IBM Corp. 2014. All Rights Reserved
+#
+#       US Government Users Restricted Rights - Use, duplication
+#       or disclosure restricted by GSA ADP Schedule Contract
+#       with IBM Corp.
+#
+#
+#######################################################################
+#
+# Example configuration for the Netcool/OMNIbus Remedy Gateway
+#
+# Notes:
+#
+# Fields that are marked as 'ON INSERT ONLY' will only be passed when
+# an event is inserted for the first time. (ie. they will not be
+# updated). The ordering of the fields is not important as the gateway
+# will use named value insertion.
+#
+#######################################################################
+CREATE MAPPING StatusMap
+(
+    '536870914'     = '@Identifier'       ON INSERT ONLY,
+    '536870913'     = '@Serial'           ON INSERT ONLY,
+    '536870944'     = '@Node'             ON INSERT ONLY,
+    '536870915'     = '@NodeAlias'        ON INSERT ONLY,
+    '536870932'     = '@Manager'          ON INSERT ONLY,
+    '536870939'     = '@Agent'            ON INSERT ONLY,
+    '536870918'     = '@AlertGroup'       ON INSERT ONLY,
+    '536870931'     = '@AlertKey'         ON INSERT ONLY,
+            '7'     = '@Severity',
+    '536870916'     = '@Summary'          ON INSERT ONLY,
+    '536870946'     = '@StateChange',
+    '536870912'     = '@FirstOccurrence'  ON INSERT ONLY,
+    '536870917'     = '@LastOccurrence',
+    '536870935'     = '@InternalLast',
+    '536870938'     = '@Poll'             ON INSERT ONLY,
+    '536870941'     = '@Type'             ON INSERT ONLY,
+    '536870940'     = '@Tally',
+    '536870945'     = '@Class'            ON INSERT ONLY,
+    '536870942'     = '@Grade'            ON INSERT ONLY,
+    '536870934'     = '@Location'         ON INSERT ONLY,
+    '536870933'     = '@Acknowledged',
+    '536870922'     = '@ServerSerial'     ON INSERT ONLY,
+    '536870923'     = '@ServerName'       ON INSERT ONLY,
+    '900000001'     = '@TicketOwner'      ON INSERT ONLY,
+    '900000002'     = '@TTAC_'            ON INSERT ONLY,
+    '900000003'     = '@Ticket'           ON INSERT ONLY,
+    '900000004'     = '@Owner'            ON INSERT ONLY
+) DEDUPLICATE ('7','536870917','536870940','536870933');
+
+CREATE MAPPING JournalMap
+(
+    'UID'           = JOURNAL.UID INTERNAL ONLY,
+    'Chrono'        = JOURNAL.CHRONO INTERNAL ONLY,
+    '536870921'     = JOURNAL.TEXT
+);
+
+# This map requires the replication definition for alerts.details
+# to be uncommented in bmc_remedy.rdrwtr.tblrep.def, else it is
+# ignored.
+CREATE MAPPING DetailsMap
+(
+    '536870921'     = '@Name' + ':' + '@Detail'
+);

@@ -1,0 +1,89 @@
+#######################################################################
+#
+#       Licensed Materials - Property of IBM
+#
+#
+#
+#       (C) Copyright IBM Corp. 2014. All Rights Reserved
+#
+#       US Government Users Restricted Rights - Use, duplication
+#       or disclosure restricted by GSA ADP Schedule Contract
+#       with IBM Corp.
+#
+#
+#######################################################################
+#
+# Property Name                         : Default
+#
+#
+# Generic Omnibus Properties
+#
+# ConfigKeyFile                         : ''
+# HttpServer.Password                   : ''
+# HttpServer.Port                       : 0
+# HttpServer.Username                   : 'netcool'
+# HttpServer.Realm                      : 'netcool'
+# HttpServer.Root                       : '$OMNIHOME/www'
+# MessageLevel                          : 'warn:debug'
+# MessageLog                            : '$OMNIHOME/log/G_BMC_REMEDY.log'
+# MaxLogFileSize                        : 0
+# MessageLogRolltime                    : ''
+# Name                                  : 'bmc_remedy'
+# Props.AllowUnknown                    : 'false'
+# PropsFile                             : '$OMNIHOME/etc/G_BMC_REMEDY.props'
+#
+# Gateway Framework properties
+#
+# Gate.Cache.NotificationMap            : '$OMNIHOME/gates/bmc_remedy/bmc_remedy.notification.js'
+# Gate.Cache.ResyncMode                 : 'AUTO'
+# Gate.Cache.ResyncSuppressDeletes      : 'FALSE'
+# Gate.Cache.ResyncSuppressInitialDeletes: 'FALSE'
+# Gate.ConversionsDirection             : 'REVERSE'
+# Gate.ConversionsTableName             : 'conversions.remedy'
+# Gate.HistoricResync                   : 'true'
+# Gate.MapFile                          : '$OMNIHOME/gates/bmc_remedy/bmc_remedy.map'
+# Gate.PackageBase                      : 'com.ibm.tivoli.netcool.integrations.gateway'
+# Gate.RdrWtr.DetailsTableName          : 'alerts.details'
+# Gate.RdrWtr.IducFlushRate             : 0
+# Gate.RdrWtr.JournalTableName          : 'alerts.journal'
+# Gate.RdrWtr.Password                  : ''
+# Gate.RdrWtr.ReconnectTimeout          : 30
+# Gate.RdrWtr.Server                    : 'localhost:4100'
+# Gate.RdrWtr.StatusTableName           : 'alerts.status'
+# Gate.RdrWtr.TblReplicateDefFile       : '$OMNIHOME/gates/bmc_remedy/bmc_remedy.rdrwtr.tblrep.def'
+# Gate.RdrWtr.Username                  : 'root'
+# Gate.TargetIdField                    : 'Location'
+# Gate.TraceFile                        : ''
+# Gate.TraceMode                        : 'NONE'
+# Gate.Type                             : 'bmc_remedy'
+#
+# Remedy gateway specific properties
+#
+# Gate.Remedy.ClearTicketId             : 'false'
+# Gate.Remedy.Connections               : 2
+# Gate.Remedy.CreationErrorCode         : 'CREATION_FAILURE'
+# Gate.Remedy.DeleteEntries             : 'false'
+# Gate.Remedy.DeleteUpdates             : 'false'
+# Gate.Remedy.Form                      : ''
+# Gate.Remedy.HopefulClose              : 'false'
+# Gate.Remedy.MaxElementsRetrieve       : 100
+# Gate.Remedy.NotificationQuery         : '\'7\' < \"X\" AND \'2\'=\"USER\" AND \'701\'=\"FORM\"'
+# Gate.Remedy.OwnNotifications          : 'FIRST'
+# Gate.Remedy.Password                  : ''
+# Gate.Remedy.Port                      : 0
+# Gate.Remedy.ReclaimARS                : 1
+# Gate.Remedy.RetryCodes                : '90, 91, 92, 93, 95, 99, 394, 566, 590, 591, 9425'
+# Gate.Remedy.RetryWait                 : 2
+# Gate.Remedy.Server                    : 'localhost'
+# Gate.Remedy.UpdateForm                : 'Alert Events'
+# Gate.Remedy.UpdateQueryInterval       : 3
+# Gate.Remedy.Username                  : ''
+#
+#######################################################################
+
+#######################################################################
+#
+# To make alterations to the default value for any properties
+# append the new values here:-
+#
+#######################################################################
