@@ -10,7 +10,7 @@
 nco_process 'PrimaryObjectServer'
 {
 	Command '$OMNIHOME/bin/nco_objserv -name <%= node['objsrv']['ncoms'] %> -pa <%= node['objsrv']['os_pa_name'] %> -listeningport 6969 -messagelevel info' run as '<%= node['objsrv']['nc_act'] %>'
-	Host        = '<%= node['objsrv']['OS'] %>'
+	Host        = '<%= node['OS'] %>'
 	Managed     = True
 	RestartMsg  = '${NAME} running as ${EUID} has been restored on ${HOST}.'
 	AlertMsg    = '${NAME} running as ${EUID} has died on ${HOST}.'
@@ -80,6 +80,6 @@ nco_service 'InactiveProcesses'
 ## uncomment once you get all servers running!
 nco_routing
 {
-	host '<%= node['objsrv']['OS'] %>' '<%= node['objsrv']['os_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['nc_epwd'] %>'
-	host '<%= node['objsrv']['PS'] %>' '<%= node['objsrv']['ps_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['nc_epwd'] %>'
+	host '<%= node['OS'] %>' '<%= node['objsrv']['os_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['nc_epwd'] %>'
+	host '<%= node['PS'] %>' '<%= node['objsrv']['ps_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['nc_epwd'] %>'
 }

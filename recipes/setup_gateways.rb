@@ -10,7 +10,7 @@ end
 
 # copy remedy template from default location
 execute 'copy_default_remedy' do
-  command "cp #{node['objsrv']['ob_dir']}/gates/bmc_remedy/* #{node['objsrv']['rdy_dir']}"
+  command "find #{node['objsrv']['ob_dir']}/gates/bmc_remedy -maxdepth 1 -type f -exec cp -t #{node['objsrv']['rdy_dir']} {} +"
   cwd '/usr/bin'
   not_if { File.exist?("#{node['objsrv']['rdy_dir']}/bmc_remedy.map") }
   user node['objsrv']['nc_act']

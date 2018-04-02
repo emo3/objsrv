@@ -96,7 +96,7 @@ execute 'shutdown_objsrv' do
   command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
   -server #{node['objsrv']['ncoms']} \
   -user root \
-  -password '#{node['objsrv']['root_pwd']}' \
+  -password '#{node['root_pwd']}' \
   -input #{node['objsrv']['temp_dir']}/shutdown.sql"
   only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
   sensitive true

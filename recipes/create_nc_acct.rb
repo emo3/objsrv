@@ -9,7 +9,7 @@ execute 'create_user' do
 end
 
 execute 'create_pwd' do
-  command "usermod --password $(echo #{node['objsrv']['nc_pwd']} | openssl passwd -1 -stdin) #{node['objsrv']['nc_act']}"
+  command "usermod --password $(echo #{node['nc_pwd']} | openssl passwd -1 -stdin) #{node['objsrv']['nc_act']}"
 end
 # Add UG1=ncoadmin group to user root
 execute 'add_group' do

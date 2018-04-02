@@ -31,3 +31,8 @@ suites:
       inspec_tests:
         - test/smoke/default
     attributes:
+      nc_pwd: <%= ENV['NCP'] %>
+      root_pwd: <%= ENV['RPW'] %>
+      OS: <%= ENV['OS'] %>
+      PSP: <%= ENV['PSP'] %>
+      PS: <%= ENV['PS'] %>
