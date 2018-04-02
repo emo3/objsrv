@@ -1,6 +1,6 @@
 # set the IP and probe server name
-hostsfile_entry node['objsrv']['pa_ip'] do
-  hostname node['objsrv']['PA']
+hostsfile_entry node['PAP'] do
+  hostname node['PA']
   action   :create
   unique   true
 end
