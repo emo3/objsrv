@@ -40,29 +40,3 @@ remote_file "#{node['objsrv']['ob_dir']}/etc/passwdkey.key" do
   mode 0440
   action :create
 end
-
-# create configuration files for PA
-template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.conf" do
-  source 'nco_pa.conf.erb'
-  user node['objsrv']['nc_act']
-  group node['objsrv']['nc_grp']
-  mode 0444
-end
-template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.props" do
-  source 'nco_pa.props.erb'
-  user node['objsrv']['nc_act']
-  group node['objsrv']['nc_grp']
-  mode 0444
-end
-
-# create setup script for netcool applications
-template '/etc/init.d/nco' do
-  source 'nco.erb'
-  group node['objsrv']['nc_grp']
-  mode 0755
-end
-
-# add script to system configuration
-service 'nco' do
-  action [:enable, :start]
-end

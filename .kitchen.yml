@@ -34,5 +34,6 @@ suites:
       nc_pwd: <%= ENV['NCP'] %>
       root_pwd: <%= ENV['RPW'] %>
       OS: <%= ENV['OS'] %>
+      PS: <%= ENV['PS'] %>
       PAP: <%= ENV['PSP'] %>
       PA: <%= ENV['PS'] %>
