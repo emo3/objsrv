@@ -1,0 +1,24 @@
+# CD to disk files in media directory
+C0F5REN,nc81-eif-sdk.zip,IBM Tivoli Event Integration Facility (EIF) SDK for IBM Tivoli Netcool/OMNIbus,
+CBM1XEN,nc81-gateways.zip,IBM Tivoli Netcool/OMNIbus Gateways Version 8.1
+CN1FLEN.zip,gateway-nco-g-jdbc-reporting-scripts-1
+CN4FTEN.zip,gateway-nco-g-tsrm-5
+CN4FUEN.zip,gateway-nco-g-jdbc-6
+CN4FVEN.zip,gateway-libngjava-7
+CN4FWEN.zip,gateway-libtal-6
+CN4FXEN.zip,gateway-libngtktk-6
+CN6I2EN.zip,gateway-nco-g-tivoli-eif-5
+CBM1YEN,,IBM Tivoli Netcool/OMNIbus Event Forwarding Version 8.1
+CN1J1EN.zip,gateway-nco-g-oracle-5
+CN1J2EN.zip,gateway-nco-g-file-3
+CN1J4EN.zip,gateway-nco-g-snmp-6
+CN1J5EN.zip,gateway-nco-g-audit-scripts-2
+CN1J6EN.zip,gateway-nco-g-reporter-scripts-4
+CN1J7EN.zip,gateway-nco-g-icmd-1
+CN1J8EN.zip,gateway-nco-g-jdbc-audit-scripts-1
+CN4G4EN.zip,gateway-nco-g-xml-6
+CN4G5EN.zip,common-transformer-6
+CN6I1EN.zip,gateway-nco-g-socket-java-2
+CN6I3EN.zip,gateway-libgwutility-2
+CN594EN.zip,common-transportmodule-9
+CBM1WEN,nc81-probes.zip,IBM Tivoli Netcool/OMNIbus Probes Version 8.1

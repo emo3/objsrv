@@ -6,7 +6,7 @@
 
 require 'spec_helper'
 
-describe 'objsrv::make_nc_base' do
+describe 'objsrv::make_nc_os' do
   context 'When all attributes are default, on an Redhat 7.4' do
     let(:chef_run) do
       # for a complete list of available platforms and versions see:

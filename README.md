@@ -49,7 +49,7 @@ depends 'objsrv'
 Then, in a recipe:
 
 ```
-include_recipe 'objsrv::make_nc_base'
+include_recipe 'objsrv::make_nc_os'
 ```
 
 If your cookbook provides resources, be sure to include examples of how to use
