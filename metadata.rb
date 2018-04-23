@@ -20,7 +20,4 @@ supports 'redhat'
 #
 # source_url 'https://github.com/<insert_org_here>/objsrv'
 depends 'delivery-truck'
-depends 'lvm'
-depends 'limits'
-depends 'hostsfile'
-depends 'selinux'
+depends 'nc_base', '~> 0.1.0'
