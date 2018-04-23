@@ -1,6 +1,6 @@
 # Install the Netcool tools defined between ()
 %w(nco-g-jdbc nco-g-bmc-remedy).each do |tool|
-  nc_tool::install_tool 'do install tool' do
+  install_tool 'do install tool' do
     tool_package node['nc_tools'][tool]['tool_package']
     tool_url node['nc_tools'][tool]['tool_url']
     tool_dir node['nc_tools'][tool]['tool_dir']
