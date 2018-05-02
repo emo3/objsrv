@@ -1,7 +1,7 @@
 ---
 driver:
   name: vagrant
-  # vm_hostname: <%= ENV['OS'] %>
+  vm_hostname: <%= ENV['OS'] %>
   customize:
     memory: <%= ENV['OSR'] %>
     cpus: <%= ENV['OSC'] %>
