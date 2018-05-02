@@ -1,6 +1,6 @@
 # This is so PAD can read shadow file
 file '/etc/shadow' do
-  mode '0400'
+  mode 0004
 end
 
 # set the IP and probe server name
@@ -110,7 +110,7 @@ execute 'create_netcool' do
 end
 
 file "#{node['objsrv']['temp_dir']}/create_user.sql" do
-  action :delete
+  action :nothing
 end
 
 # create sql file to change root password
@@ -134,7 +134,7 @@ execute 'change_root' do
 end
 
 file "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
-  action :delete
+  action :nothing
 end
 
 # This will stop the object server via nco_sql
@@ -160,7 +160,7 @@ execute 'shutdown_objsrv' do
 end
 
 file "#{node['objsrv']['temp_dir']}/shutdown.sql" do
-  action :delete
+  action :nothing
 end
 
 # create sql file to verify netcool

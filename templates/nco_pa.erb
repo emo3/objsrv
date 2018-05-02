@@ -136,13 +136,13 @@ case "$1" in
 				if [ $? -eq 0 ]; then
 					[ "$BOOTUP" != "verbose" ] && echo -n "Netcool/OMNIbus : Starting Process Control ..."
 					if [ "$SECURE" = "Y" ]; then
-					  su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
-# 				  ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key
-#						${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -secure -killprocessgroup
+						# su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
+						${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key
+						# ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -secure -killprocessgroup
 					else
-						su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
-#						${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key
-#						${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -killprocessgroup
+						# su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
+						${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key
+						# ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -killprocessgroup
 					fi
 					sleep 2
 					PID=`ps auxwww | grep nco_pad | grep ${NCO_PA} | grep -v grep | awk '{print $2}'`
