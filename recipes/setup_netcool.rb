@@ -94,7 +94,7 @@ template "#{node['objsrv']['temp_dir']}/create_user.sql" do
   source 'create_user.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  sensitive true
+  # sensitive true
   mode 0440
 end
 
@@ -105,7 +105,7 @@ execute 'create_netcool' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/create_user.sql"
-  sensitive true
+  # sensitive true
   action :run
 end
 
@@ -118,7 +118,7 @@ template "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
   source 'set_rpwd.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  sensitive true
+  # sensitive true
   mode 0440
 end
 
@@ -129,7 +129,7 @@ execute 'change_root' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/set_rpwd.sql"
-  sensitive true
+  # sensitive true
   action :run
 end
 
@@ -155,7 +155,6 @@ execute 'shutdown_objsrv' do
   -password '#{node['root_pwd']}' \
   -input #{node['objsrv']['temp_dir']}/shutdown.sql"
   only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
-  sensitive true
   action :run
 end
 

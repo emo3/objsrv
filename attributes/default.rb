@@ -8,7 +8,7 @@ default['objsrv']['media_url']   = 'http://10.1.1.30/media'
 default['objsrv']['rhel']        = %w(bc ntp firefox compat-libstdc++-33.i686 libXtst.i686 compat-libstdc++-33 compat-db libXp libXmu libXtst pam libXft gtk2 xauth motif)
 default['objsrv']['nc_act']      = 'netcool'
 default['objsrv']['nc_grp']      = 'ncoadmin'
-default['objsrc']['root_pwd']    = 'nc0Adm1n'
+default['objsrv']['root_pwd']    = 'nc0Adm1n'
 default['objsrv']['nc_epwd']     = '$1$xyz$KYGw.YHIMKWpbx6InG1H9/'
 default['objsrv']['pa_epwd']     = '@44:GlEwL3cFaU+Pfjcm5S7xNs00PubYXnWhTqEVDtgvUjo=@'
 default['objsrv']['encryption']  = 'AES'
