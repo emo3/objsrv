@@ -5,7 +5,7 @@ driver:
   customize:
     memory: <%= ENV['OSR'] %>
     cpus: <%= ENV['OSC'] %>
-    # name: <%= ENV['OS'] %>
+    name: <%= ENV['OS'] %>
   network:
    - ['private_network', ip: <%= ENV['OSP'] %>]
 

@@ -1,3 +1,8 @@
+# This is so PAD can read shadow file
+file '/etc/shadow' do
+  mode '0400'
+end
+
 # set the IP and probe server name
 hostsfile_entry node['PAP'] do
   hostname node['PA']
@@ -38,14 +43,14 @@ template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.props"
 end
 
 # create setup script for netcool applications
-template '/etc/init.d/nco' do
-  source 'nco.erb'
+template '/etc/init.d/nco_pa' do
+  source 'nco_pa.erb'
   group node['objsrv']['nc_grp']
   mode 0755
 end
 
 # add script to system configuration
-service 'nco' do
+service 'nco_pa' do
   action [:enable, :start]
 end
 

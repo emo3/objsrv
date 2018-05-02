@@ -29,6 +29,7 @@
   Primary: <%= node['OS'] %> <%= node['objsrv']['os_port'] %>
 }
 
+# Backup Object Server
 [<%= node['objsrv']['b-ncoms'] %>]
 {
   Primary: <%= node['OS'] %> <%= node['objsrv']['os_port'] %>
