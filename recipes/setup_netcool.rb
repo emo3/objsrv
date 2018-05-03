@@ -106,7 +106,7 @@ template "#{node['objsrv']['temp_dir']}/create_user.sql" do
   source 'create_user.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  # sensitive true
+  sensitive true
   mode 0440
 end
 
@@ -117,12 +117,12 @@ execute 'create_netcool' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/create_user.sql"
-  # sensitive true
+  sensitive true
   action :run
 end
 
 file "#{node['objsrv']['temp_dir']}/create_user.sql" do
-  action :nothing
+  action :delete
 end
 
 # create sql file to change root password
@@ -130,7 +130,7 @@ template "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
   source 'set_rpwd.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  # sensitive true
+  sensitive true
   mode 0440
 end
 
@@ -141,12 +141,12 @@ execute 'change_root' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/set_rpwd.sql"
-  # sensitive true
+  sensitive true
   action :run
 end
 
 file "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
-  action :nothing
+  action :delete
 end
 
 # This will stop the object server via nco_sql
@@ -164,7 +164,7 @@ execute 'shutdown_objsrv' do
   command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
   -server #{node['objsrv']['ncoms']} \
   -user root \
-  -password '#{node['root_pwd']}' \
+  -password '#{node['objsrv']['root_pwd']}' \
   -input #{node['objsrv']['temp_dir']}/shutdown.sql"
   cwd "#{node['objsrv']['ob_dir']}/bin"
   only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
