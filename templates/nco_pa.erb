@@ -45,19 +45,19 @@
 [ ${NETWORKING} = "no" ] && exit 0
 
 # Variables that can be changed
-START_NCO=Y			# Start nco_pad
+START_NCO=Y      # Start nco_pad
 NCHOME=<%= node['objsrv']['nc_dir'] %> # Set directory for $NCHOME
-OMNIHOME=$NCHOME/omnibus			# Set directory for $OMNIHOME
-NCO_PA="<%= node['objsrv']['os_pa_name'] %>"	# Set Process Agent's name
-SECURE=Y				# Y/N run Process Agent in secure mode
+OMNIHOME=$NCHOME/omnibus      # Set directory for $OMNIHOME
+NCO_PA="<%= node['objsrv']['os_pa_name'] %>"  # Set Process Agent's name
+SECURE=Y        # Y/N run Process Agent in secure mode
 NETCOOL_LICENSE_FILE=27000@localhost # Points to flex license server
 
 export NCHOME OMNIHOME NCO_PA NETCOOL_LICENSE_FILE
 
 if [ ! -d $OMNIHOME/bin ]; then
-	# $OMNIHOME/bin doesnt exist
-	echo "directory $OMNIHOME/bin: does not exist, nco not starting"
-	exit
+  # $OMNIHOME/bin doesnt exist
+  echo "directory $OMNIHOME/bin: does not exist, nco not starting"
+  exit
 fi
 
 # Omnibus 3.5:
@@ -68,128 +68,124 @@ fi
 # children using the 'kill' command.
 
 killpad() {
-	# Find all PAD processes
-	# ps -e gets basic details on all processes
-	pad_pids=`ps -e |
-			awk '$4 == "nco_pad" {print $1}' |
-			sort -n`
+  # Find all PAD processes
+  # ps -e gets basic details on all processes
+  pad_pids=`ps -e |
+      awk '$4 == "nco_pad" {print $1}' |
+      sort -n`
 
-	# NOTE: If this script is run as non-root, we have the potential
-	# for an endless loop here.
-	# That is because the effective user may not have permission
-	# to terminate some of the PADs on the system.
-	# Added count to terminate loop after 10 iterations.
+  # NOTE: If this script is run as non-root, we have the potential
+  # for an endless loop here.
+  # That is because the effective user may not have permission
+  # to terminate some of the PADs on the system.
+  # Added count to terminate loop after 10 iterations.
 
-	count=0
-	while [ "$pad_pids" != "" -a $count -lt 10 ]
-	do
+  count=0
+  while [ "$pad_pids" != "" -a $count -lt 10 ]
+  do
 
-		# Find all the process group id's of PAD children
+    # Find all the process group id's of PAD children
 
- 		child_list=""
+     child_list=""
 
-		for parent_pid in $pad_pids
-		do
-			# ps -e j (not "-ej" or "ej") gets groups details
-			children=`ps -e j |
-				awk '$1 == pid && $10 != "nco_pad" {print $3}' pid=$parent_pid |
-				sort -nru`
-			child_list="$child_list $children"
-		done
+    for parent_pid in $pad_pids
+    do
+      # ps -e j (not "-ej" or "ej") gets groups details
+      children=`ps -e j |
+        awk '$1 == pid && $10 != "nco_pad" {print $3}' pid=$parent_pid |
+        sort -nru`
+      child_list="$child_list $children"
+    done
 
-		# Kill PADs first to prevent them from re-starting children
+    # Kill PADs first to prevent them from re-starting children
 
-		kill $pad_pids
+    kill $pad_pids
 
-		# Kill child processes and all other processes that share
-		# their process group id's.
+    # Kill child processes and all other processes that share
+    # their process group id's.
 
-		for gid in $child_list
-		do
-			[ "$gid" != "" ] && kill -TERM -$gid
-		done
+    for gid in $child_list
+    do
+      [ "$gid" != "" ] && kill -TERM -$gid
+    done
 
-		# In case PAD daemons weren't killed in the right order
-		# get the ones that have come alive again.
-		# This will happen if the orginal PAD pid's span
-		# across pid wrap around.
+    # In case PAD daemons weren't killed in the right order
+    # get the ones that have come alive again.
+    # This will happen if the orginal PAD pid's span
+    # across pid wrap around.
 
-		count=`expr $count + 1`
+    count=`expr $count + 1`
 
-		sleep 10
+    sleep 10
 
-		# ps -e gets basic details on all processes
-		pad_pids=`ps -e |
-			awk '$4 == "nco_pad" {print $1}' |
-			sort -n`
-	done
+    # ps -e gets basic details on all processes
+    pad_pids=`ps -e |
+      awk '$4 == "nco_pad" {print $1}' |
+      sort -n`
+  done
 }
 # Start/stop NCO processes
 
 case "$1" in
 'start')
-	# Start the required processes.
-	case "$START_NCO" in
-		'Y')
-			if [ -x $OMNIHOME/bin/nco_pad ]; then
-				grep ${NCO_PA} $NCHOME/etc/omni.dat >/dev/null 2>/dev/null
-				if [ $? -eq 0 ]; then
-					[ "$BOOTUP" != "verbose" ] && echo -n "Netcool/OMNIbus : Starting Process Control ..."
-					if [ "$SECURE" = "Y" ]; then
-						su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
-						# ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key
-						# ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -secure -killprocessgroup
-					else
-						su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
-						# ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key
-						# ${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -killprocessgroup
-					fi
-					sleep 2
-					PID=`ps auxwww | grep nco_pad | grep ${NCO_PA} | grep -v grep | awk '{print $2}'`
-					if [ "$PID" != "" ]; then
-						echo_success;
-					else
-						echo_failure;
-					fi
-					[ "$BOOTUP" != "verbose" ] && echo
-				else
-					[ "$BOOTUP" != "verbose" ] && echo "Netcool/OMNIbus : Process Control not configured"
-				fi
-			else
-				echo "Netcool/OMNIbus : nco_pad is not executable"
-			fi
-			;;
-		'N')
-			[ "$BOOTUP" != "verbose" ] && echo "Netcool/OMNIbus : Process Control not starting"
-			;;
-		*)
-			echo "Netcool/OMNIbus : START_NCO incorrectly set"
-			;;
-	esac
-	;;
+  # Start the required processes.
+  case "$START_NCO" in
+    'Y')
+      if [ -x $OMNIHOME/bin/nco_pad ]; then
+        grep ${NCO_PA} $NCHOME/etc/omni.dat >/dev/null 2>/dev/null
+        if [ $? -eq 0 ]; then
+          [ "$BOOTUP" != "verbose" ] && echo -n "Netcool/OMNIbus : Starting Process Control ..."
+          if [ "$SECURE" = "Y" ]; then
+            su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -secure -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
+          else
+            su - netcool -c "${OMNIHOME}/bin/nco_pad -name ${NCO_PA} -authenticate PAM -killprocessgroup -cryptalgorithm AES_FIPS -keyfile ${OMNIHOME}/etc/passwdkey.key"
+          fi
+          sleep 2
+          PID=`ps auxwww | grep nco_pad | grep ${NCO_PA} | grep -v grep | awk '{print $2}'`
+          if [ "$PID" != "" ]; then
+            echo_success;
+          else
+            echo_failure;
+          fi
+          [ "$BOOTUP" != "verbose" ] && echo
+        else
+          [ "$BOOTUP" != "verbose" ] && echo "Netcool/OMNIbus : Process Control not configured"
+        fi
+      else
+        echo "Netcool/OMNIbus : nco_pad is not executable"
+      fi
+      ;;
+    'N')
+      [ "$BOOTUP" != "verbose" ] && echo "Netcool/OMNIbus : Process Control not starting"
+      ;;
+    *)
+      echo "Netcool/OMNIbus : START_NCO incorrectly set"
+      ;;
+  esac
+  ;;
 
 'stop')
 
-	PID=`ps auxwww | grep nco_pad | grep -v grep | awk '{print $2}'`
-	if [ "$PID" != "" ]; then
-		[ "$BOOTUP" != "verbose" ] && echo -n "Netcool/OMNIbus : Stopping Process Control ..."
-		killpad
-		if [ $? -eq 0 ]; then
-			echo_success
-		else
-			echo_failure
-		fi
-		[ "$BOOTUP" != "verbose" ] && echo
-	else
-		echo "Netcool/OMNIbus : Process Control not running ..."
-	fi
+  PID=`ps auxwww | grep nco_pad | grep -v grep | awk '{print $2}'`
+  if [ "$PID" != "" ]; then
+    [ "$BOOTUP" != "verbose" ] && echo -n "Netcool/OMNIbus : Stopping Process Control ..."
+    killpad
+    if [ $? -eq 0 ]; then
+      echo_success
+    else
+      echo_failure
+    fi
+    [ "$BOOTUP" != "verbose" ] && echo
+  else
+    echo "Netcool/OMNIbus : Process Control not running ..."
+  fi
 
-	;;
+  ;;
 restart|reload)
-	$0 stop
-	$0 start
-	;;
+  $0 stop
+  $0 start
+  ;;
 *)
-	echo "Usage: /etc/init.d/nco { start | stop | restart | reload }"
-	;;
+  echo "Usage: /etc/init.d/nco { start | stop | restart | reload }"
+  ;;
 esac

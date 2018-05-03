@@ -169,7 +169,6 @@ end
 # create setup script for netcool applications
 template '/etc/init.d/nco_pa' do
   source 'nco_pa.erb'
-  group node['objsrv']['nc_grp']
   mode 0755
 end
 
