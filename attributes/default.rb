@@ -9,7 +9,6 @@ default['objsrv']['rhel']        = %w(bc ntp firefox compat-libstdc++-33.i686 li
 default['objsrv']['nc_act']      = 'netcool'
 default['objsrv']['nc_grp']      = 'ncoadmin'
 default['objsrv']['root_pwd']    = 'nc0Adm1n'
-default['objsrv']['nc_epwd']     = '$1$xyz$KYGw.YHIMKWpbx6InG1H9/'
 default['objsrv']['pa_epwd']     = '@44:GlEwL3cFaU+Pfjcm5S7xNs00PubYXnWhTqEVDtgvUjo=@'
 default['objsrv']['encryption']  = 'AES'
 default['objsrv']['os_pa_name']  = 'NCO_PA'

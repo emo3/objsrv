@@ -80,6 +80,6 @@ nco_service 'InactiveProcesses'
 ## uncomment once you get all servers running!
 nco_routing
 {
-	host '<%= node['OS'] %>' '<%= node['objsrv']['os_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['nc_epwd'] %>'
-	host '<%= node['PS'] %>' '<%= node['objsrv']['ps_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['nc_epwd'] %>'
+	host '<%= node['OS'] %>' '<%= node['objsrv']['os_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['pa_epwd'] %>'
+	host '<%= node['PS'] %>' '<%= node['objsrv']['ps_pa_name'] %>' '<%= node['objsrv']['nc_act'] %>' '<%= node['objsrv']['pa_epwd'] %>'
 }
