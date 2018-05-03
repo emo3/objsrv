@@ -1,8 +1,3 @@
-# This is so PAD can read shadow file
-file '/etc/shadow' do
-  mode 0004
-end
-
 # set the IP and probe server name
 hostsfile_entry node['PAP'] do
   hostname node['PA']
@@ -26,44 +21,6 @@ execute 'create_interface' do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   action :run
-end
-
-# create configuration files for PA
-template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.conf" do
-  source 'nco_pa.conf.erb'
-  user node['objsrv']['nc_act']
-  group node['objsrv']['nc_grp']
-  mode 0444
-end
-template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.props" do
-  source 'nco_pa.props.erb'
-  user node['objsrv']['nc_act']
-  group node['objsrv']['nc_grp']
-  mode 0444
-end
-
-# create setup script for netcool applications
-template '/etc/init.d/nco_pa' do
-  source 'nco_pa.erb'
-  group node['objsrv']['nc_grp']
-  mode 0755
-end
-
-## create files for PAM
-# netcool
-template '/etc/pam.d/netcool' do
-  source 'netcool.erb'
-  mode 0644
-end
-# object server
-template '/etc/pam.d/nco_objserv' do
-  source 'nco_objserv.erb'
-  mode 0644
-end
-
-# add script to system configuration
-service 'nco_pa' do
-  action [:enable, :start]
 end
 
 # create the object server database
@@ -168,12 +125,57 @@ execute 'shutdown_objsrv' do
   -input #{node['objsrv']['temp_dir']}/shutdown.sql"
   cwd "#{node['objsrv']['ob_dir']}/bin"
   only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  # The nco_sql will exit with error always
   returns [0, 255]
+  sensitive true
   action :run
 end
 
 file "#{node['objsrv']['temp_dir']}/shutdown.sql" do
-  action :nothing
+  action :delete
+end
+
+# create configuration files for PA
+template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.conf" do
+  source 'nco_pa.conf.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode 0444
+end
+template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.props" do
+  source 'nco_pa.props.erb'
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode 0444
+end
+
+## create files for PAM
+# netcool
+template '/etc/pam.d/netcool' do
+  source 'netcool.erb'
+  mode 0644
+end
+# object server
+template '/etc/pam.d/nco_objserv' do
+  source 'nco_objserv.erb'
+  mode 0644
+end
+
+# This is so PAD can read shadow file
+file '/etc/shadow' do
+  mode 0004
+end
+
+# create setup script for netcool applications
+template '/etc/init.d/nco_pa' do
+  source 'nco_pa.erb'
+  group node['objsrv']['nc_grp']
+  mode 0755
+end
+
+# add script to system configuration
+service 'nco_pa' do
+  action [:enable, :start]
 end
 
 # create sql file to verify netcool
