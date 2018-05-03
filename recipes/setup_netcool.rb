@@ -49,6 +49,18 @@ template '/etc/init.d/nco_pa' do
   mode 0755
 end
 
+## create files for PAM
+# netcool
+template '/etc/pam.d/netcool' do
+  source 'netcool.erb'
+  mode 0644
+end
+# object server
+template '/etc/pam.d/nco_objserv' do
+  source 'nco_objserv.erb'
+  mode 0644
+end
+
 # add script to system configuration
 service 'nco_pa' do
   action [:enable, :start]
@@ -154,7 +166,9 @@ execute 'shutdown_objsrv' do
   -user root \
   -password '#{node['root_pwd']}' \
   -input #{node['objsrv']['temp_dir']}/shutdown.sql"
+  cwd "#{node['objsrv']['ob_dir']}/bin"
   only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  returns [0, 255]
   action :run
 end
 
