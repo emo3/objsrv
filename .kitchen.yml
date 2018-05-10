@@ -8,6 +8,7 @@ driver:
     name: <%= ENV['OS'] %>
   network:
    - ['private_network', ip: <%= ENV['OSP'] %>]
+   # - ['public_network', bridge: '<%= ENV['ETH'] %>']
 
 provisioner:
   name: chef_zero
@@ -32,8 +33,6 @@ suites:
         - test/smoke/default
     attributes:
       nc_pwd: <%= ENV['NCP'] %>
-      root_pwd: <%= ENV['RPW'] %>
       OS: <%= ENV['OS'] %>
       PS: <%= ENV['PS'] %>
-      PAP: <%= ENV['PSP'] %>
-      PA: <%= ENV['PS'] %>
+      PSP: <%= ENV['PSP'] %>

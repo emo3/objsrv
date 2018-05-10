@@ -4,8 +4,6 @@ default['objsrv']['nc_dir']      = "#{node['objsrv']['app_dir']}/netcool"
 default['objsrv']['ob_dir']      = "#{node['objsrv']['nc_dir']}/omnibus"
 default['objsrv']['temp_dir']    = '/tmp'
 default['objsrv']['media_url']   = 'http://10.1.1.30/media'
-# default['objsrv']['rhel']        = %w(bc ntp firefox compat-libstdc++-33.i686)
-default['objsrv']['rhel']        = %w(bc ntp firefox compat-libstdc++-33.i686 libXtst.i686 compat-libstdc++-33 compat-db libXp libXmu libXtst pam libXft gtk2 xauth motif)
 default['objsrv']['nc_act']      = 'netcool'
 default['objsrv']['nc_grp']      = 'ncoadmin'
 default['objsrv']['root_pwd']    = 'nc0Adm1n'
@@ -25,6 +23,6 @@ default['objsrv']['pa_port']     = '4200'
 default['objsrv']['bi_port']     = '4300'
 default['objsrv']['remedy_port'] = '4301'
 default['objsrv']['tdw_port']    = '4302'
-# Taken from environmental variables via .kitchen.yml
-default['PAP']                   = ''
-default['PA']                    = ''
+# set in .kitchen.yml
+default['OSP']                   = ''
+default['PSP']                   = ''

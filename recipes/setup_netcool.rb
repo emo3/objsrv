@@ -1,6 +1,13 @@
+# set the IP and ObjServ name
+hostsfile_entry node['OSP'] do
+  hostname node['OS']
+  action   :create
+  unique   true
+end
+
 # set the IP and probe server name
-hostsfile_entry node['PAP'] do
-  hostname node['PA']
+hostsfile_entry node['PSP'] do
+  hostname node['PS']
   action   :create
   unique   true
 end
