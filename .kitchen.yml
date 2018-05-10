@@ -34,5 +34,6 @@ suites:
     attributes:
       nc_pwd: <%= ENV['NCP'] %>
       OS: <%= ENV['OS'] %>
+      OSP: <%= ENV['OSP'] %>
       PS: <%= ENV['PS'] %>
       PSP: <%= ENV['PSP'] %>
