@@ -8,7 +8,6 @@ driver:
     name: <%= ENV['OS'] %>
   network:
    - ['private_network', ip: <%= ENV['OSP'] %>]
-   # - ['public_network', bridge: '<%= ENV['ETH'] %>']
 
 provisioner:
   name: chef_zero
@@ -21,7 +20,7 @@ verifier:
   name: inspec
 
 platforms:
-  - name: mycsc-7.4
+  - name: mycsc-7.5
 
 suites:
   - name: objsrv
