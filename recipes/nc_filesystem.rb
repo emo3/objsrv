@@ -1,6 +1,6 @@
 #################################################################
 # Create directories
-directory node['nc_base']['app_dir'] do
+directory node['objsrv']['app_dir'] do
   owner 'root'
   group 'root'
   mode '0755'
@@ -24,5 +24,5 @@ lvm_logical_volume 'lvnc' do
   group 'ncvg'
   size '60G'
   filesystem 'xfs'
-  mount_point node['nc_base']['app_dir']
+  mount_point node['objsrv']['app_dir']
 end
