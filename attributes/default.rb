@@ -4,6 +4,7 @@ default['objsrv']['nc_dir']      = "#{node['objsrv']['app_dir']}/netcool"
 default['objsrv']['ob_dir']      = "#{node['objsrv']['nc_dir']}/omnibus"
 default['objsrv']['temp_dir']    = '/tmp'
 default['objsrv']['media_url']   = 'http://10.1.1.30/media'
+default['objsrv']['lv_name']     = 'lvnc'
 default['objsrv']['nc_act']      = 'netcool'
 default['objsrv']['nc_grp']      = 'ncoadmin'
 default['objsrv']['root_pwd']    = 'nc0Adm1n'

@@ -1,0 +1,4 @@
+$OMNIHOME/bin/nco_pa_status -server NCO_PA -user netcool -password P@ssw0rd
+$OMNIHOME/bin/nco_pa_start  -server NCO_PA -user netcool -password P@ssw0rd -process PrimaryObjectServer
+$OMNIHOME/bin/nco_pa_stop   -server NCO_PA -user netcool -password P@ssw0rd -process PrimaryObjectServer
+$OMNIHOME/bin/nco_sql -server NCO_PA -user netcool -password P@ssw0rd

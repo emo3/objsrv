@@ -1,15 +1,19 @@
+set_hostname 'set chefsrv server' do
+  action :run
+end
+
 # set the IP and ObjServ name
-hostsfile_entry node['OSP'] do
-  hostname node['OS']
-  action   :create
-  unique   true
+set_hostname 'set ObjSrv server' do
+  host_ip   node['OSP']
+  host_name node['OS']
+  action :run
 end
 
 # set the IP and probe server name
-hostsfile_entry node['PSP'] do
-  hostname node['PS']
-  action   :create
-  unique   true
+set_hostname 'set PrbSrv server' do
+  host_ip   node['PSP']
+  host_name node['PS']
+  action :run
 end
 
 # create omni.dat via template
