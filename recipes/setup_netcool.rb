@@ -2,13 +2,6 @@ set_hostname 'set chefsrv server' do
   action :run
 end
 
-# set the IP and ObjServ name
-set_hostname 'set ObjSrv server' do
-  host_ip   node['OSP']
-  host_name node['OS']
-  action :run
-end
-
 # set the IP and probe server name
 set_hostname 'set PrbSrv server' do
   host_ip   node['PSP']
