@@ -1,4 +1,4 @@
-create user  '<%= node['objsrv']['nc_act'] %>' full name '<%= node['objsrv']['nc_act'] %>' password '<%= node['nc_pwd'] %>';
+create user  '<%= node['objsrv']['nc_act'] %>' full name '<%= node['objsrv']['nc_act'] %>' password '<%= node['objsrv']['nc_pwd'] %>';
 alter  user  '<%= node['objsrv']['nc_act'] %>' set enabled true;
 alter  group 'System' assign members '<%= node['objsrv']['nc_act'] %>';
 go
