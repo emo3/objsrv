@@ -30,6 +30,3 @@ suites:
     verifier:
       inspec_tests:
         - test/smoke/default
-    attributes:
-      PS: <%= ENV['PS'] %>
-      PSP: <%= ENV['PSP'] %>

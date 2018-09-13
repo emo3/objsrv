@@ -4,8 +4,8 @@ end
 
 # set the IP and probe server name
 set_hostname 'set PrbSrv server' do
-  host_ip   node['PSP']
-  host_name node['PS']
+  host_ip   node['objsrv']['PSP']
+  host_name node['objsrv']['PS']
   action :run
 end
 
