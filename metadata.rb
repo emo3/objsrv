@@ -19,7 +19,6 @@ supports 'redhat'
 # a Supermarket.
 #
 # source_url 'https://github.com/<insert_org_here>/objsrv'
-depends 'delivery-truck'
 depends 'nc_base', '~> 0.1.0'
 depends 'nc_tools', '~> 0.1.0'
 depends 'server_utils', '~> 0.1.0'
