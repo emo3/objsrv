@@ -1,6 +1,7 @@
 default['objsrv']['cots_dir']    = '/cots'
 default['objsrv']['app_dir']     = "#{node['objsrv']['cots_dir']}/apps"
 default['objsrv']['nc_dir']      = "#{node['objsrv']['app_dir']}/netcool"
+default['objsrv']['nc_home']     = '/home/netcool'
 default['objsrv']['ob_dir']      = "#{node['objsrv']['nc_dir']}/omnibus"
 default['objsrv']['temp_dir']    = '/tmp'
 default['objsrv']['media_url']   = 'http://10.1.1.30/media'

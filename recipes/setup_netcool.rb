@@ -188,3 +188,17 @@ template "#{node['objsrv']['ob_dir']}/verify_nc.sql" do
   group node['objsrv']['nc_grp']
   mode 0444
 end
+
+template "#{node['objsrv']['nc_home']}/.bash_profile" do
+  source 'nc_bash_profile.erb'
+  owner node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode '0755'
+end
+
+template "#{node['objsrv']['nc_home']}/ncprofile-o" do
+  source 'nc_bash_profile.erb'
+  owner node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  mode '0755'
+end
