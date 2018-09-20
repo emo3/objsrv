@@ -181,6 +181,15 @@ service 'nco_pa' do
   action [:enable, :start]
 end
 
+remote_directory "#{node['objsrv']['nc_dir']}/rules" do
+  source "#{node['objsrv']['app_dir']}/NcKL/rules"
+  files_owner node['objsrv']['nc_act']
+  files_group node['objsrv']['nc_grp']
+  files_mode '0644'
+  action :create
+  recursive true
+end
+
 # create sql file to verify netcool
 template "#{node['objsrv']['ob_dir']}/verify_nc.sql" do
   source 'verify_nc.sql.erb'
@@ -197,7 +206,7 @@ template "#{node['objsrv']['nc_home']}/.bash_profile" do
 end
 
 template "#{node['objsrv']['nc_home']}/ncprofile-o" do
-  source 'nc_bash_profile.erb'
+  source 'ncprofile.erb'
   owner node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'

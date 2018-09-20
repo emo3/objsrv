@@ -19,6 +19,7 @@ default['objsrv']['p-ncoms']     = 'P_NCO'
 default['objsrv']['b-ncoms']     = 'B_NCO'
 default['objsrv']['bi-name']     = 'BI_GATE'
 default['objsrv']['remedy']      = 'REMEDY_GATE'
+default['objsrv']['rules_file']  = 'snmptrap.rules'
 default['objsrv']['rdy_dir']     = "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['remedy']}"
 default['objsrv']['tdw']         = 'TDW_GATE'
 default['objsrv']['os_port']     = '4100'
