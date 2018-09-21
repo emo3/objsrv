@@ -185,12 +185,26 @@ end
 
 # copy Netcool rules installed to $NCHOME
 execute 'copy_rules' do
-  command "cp -r #{node['objsrv']['nc_dir']}/rules \
-  #{node['objsrv']['app_dir']}/NcKL/rules"
+  command "cp -r #{node['objsrv']['app_dir']}/NcKL/rules \
+    #{node['objsrv']['nc_dir']}/rules"
   cwd node['objsrv']['nc_dir']
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  action :run
+end
+
+# setup object server for Advanced correlation
+execute 'run_advcorr' do
+  command "#{node['objsrv']['ob_dir']}/bin/nco_sql \
+  -server #{node['objsrv']['ncoms']} \
+  -user root \
+  -password '#{node['objsrv']['root_pwd']}' \
+  -input #{node['objsrv']['app_dir']}/NcKL/advcorr.sql"
+  cwd "#{node['objsrv']['ob_dir']}/bin"
+  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  # The nco_sql will have error always
+  # returns [0, 255]
   action :run
 end
 
@@ -214,4 +228,5 @@ template "#{node['objsrv']['nc_home']}/ncprofile-o" do
   owner node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'
+  sensitive true
 end

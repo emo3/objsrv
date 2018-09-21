@@ -1,6 +1,6 @@
-alias check_mttrapd="$OMNIHOME/probes/nco_p_syntax -server <%= node['objsrv']['os_pa_name'] %> -rulesfile $NC_RULES_HOME/<%= node['objsrv']['rules_file'] %>"
+alias check_mttrapd="$OMNIHOME/probes/nco_p_syntax -server <%= node['objsrv']['ncoms'] %> -rulesfile $NC_RULES_HOME/<%= node['objsrv']['rules_file'] %>"
 alias status_pa="$OMNIHOME/bin/nco_pa_status -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %>"
 alias shut_pa="$OMNIHOME/bin/nco_pa_shutdown -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %> -process PrimaryObjectServer"
 alias start_os="$OMNIHOME/bin/nco_pa_start -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %> -process PrimaryObjectServer"
 alias stop_os="$OMNIHOME/bin/nco_pa_stop -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %> -process PrimaryObjectServer"
-alias ncs="$OMNIHOME/bin/nco_sql -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %>"
+alias ncs="$OMNIHOME/bin/nco_sql -server <%= node['objsrv']['ncoms'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %>"
