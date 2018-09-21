@@ -67,7 +67,7 @@ template "#{node['objsrv']['temp_dir']}/create_user.sql" do
   source 'create_user.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  # sensitive true
+  sensitive true
   mode 0440
 end
 
@@ -78,7 +78,8 @@ execute 'create_netcool' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/create_user.sql"
-  # sensitive true
+  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  sensitive true
   action :run
 end
 
@@ -91,7 +92,7 @@ template "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
   source 'set_rpwd.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  # sensitive true
+  sensitive true
   mode 0440
 end
 
@@ -102,7 +103,8 @@ execute 'change_root' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/set_rpwd.sql"
-  # sensitive true
+  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  sensitive true
   action :run
 end
 
@@ -131,7 +133,7 @@ execute 'shutdown_objsrv' do
   only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
   # The nco_sql will exit with error always
   returns [0, 255]
-  # sensitive true
+  sensitive true
   action :run
 end
 
@@ -181,8 +183,8 @@ service 'nco_pa' do
   action [:enable, :start]
 end
 
-remote_directory "#{node['objsrv']['nc_dir']}/rules" do
-  source "#{node['objsrv']['app_dir']}/NcKL/rules"
+directory "#{node['objsrv']['nc_dir']}/rules" do
+  source "file://#{node['objsrv']['app_dir']}/NcKL/rules"
   files_owner node['objsrv']['nc_act']
   files_group node['objsrv']['nc_grp']
   files_mode '0644'
