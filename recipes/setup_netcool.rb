@@ -183,13 +183,15 @@ service 'nco_pa' do
   action [:enable, :start]
 end
 
-directory "#{node['objsrv']['nc_dir']}/rules" do
-  source "file://#{node['objsrv']['app_dir']}/NcKL/rules"
-  files_owner node['objsrv']['nc_act']
-  files_group node['objsrv']['nc_grp']
-  files_mode '0644'
-  action :create
-  recursive true
+# copy Netcool rules installed to $NCHOME
+execute 'copy_rules' do
+  command "cp -r #{node['objsrv']['nc_dir']}/rules \
+  #{node['objsrv']['app_dir']}/NcKL/rules"
+  cwd node['objsrv']['nc_dir']
+  user node['objsrv']['nc_act']
+  group node['objsrv']['nc_grp']
+  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  action :run
 end
 
 # create sql file to verify netcool
