@@ -1,0 +1,147 @@
+#
+# Example configuration for the Netcool/OMNIbus Gateway Server
+#
+#
+CREATE MAPPING StatusMap
+(
+    'IDENTIFIER'        = '@Identifier'         ON INSERT ONLY,
+    'SERIAL'            = '@Serial'             ON INSERT ONLY,
+    'NODE'              = '@Node'               ON INSERT ONLY,
+    'NODEALIAS'         = '@NodeAlias'          ON INSERT ONLY NOTNULL '@Node',
+    'MANAGER'           = '@Manager'            ON INSERT ONLY,
+    'AGENT'             = '@Agent'              ON INSERT ONLY,
+    'ALERTGROUP'        = '@AlertGroup'         ON INSERT ONLY,
+    'ALERTKEY'          = '@AlertKey'           ON INSERT ONLY,
+    'SEVERITY'          = '@Severity',
+    'SUMMARY'           = '@Summary',
+    'STATECHANGE'       = '@StateChange'        CONVERT TO DATE,
+    'FIRSTOCCURRENCE'   = '@FirstOccurrence'    ON INSERT ONLY CONVERT TO DATE,
+    'LASTOCCURRENCE'    = '@LastOccurrence'     CONVERT TO DATE,
+    'LASTMODIFIED'      = '@StateChange'        CONVERT TO DATE,
+    'POLL'              = '@Poll'               ON INSERT ONLY,
+    'TYPE'              = '@Type'               ON INSERT ONLY,
+    'TALLY'             = '@Tally',
+    'CLASS'             = '@Class'              ON INSERT ONLY,
+    'GRADE'             = '@Grade'              ON INSERT ONLY,
+    'LOCATION'          = '@Location'           ON INSERT ONLY,
+    'OWNERUID'          = '@OwnerUID',
+    'OWNERGID'          = '@OwnerGID',
+    'ACKNOWLEDGED'      = '@Acknowledged',
+    'FLASH'             = '@Flash'              ON INSERT ONLY,
+    'EVENTID'           = '@EventId'            ON INSERT ONLY,
+    'EXPIRETIME'        = '@ExpireTime'         ON INSERT ONLY,
+    'PROCESSREQ'        = '@ProcessReq',
+    'SUPPRESSESCL'      = '@SuppressEscl',
+    'CUSTOMER'          = '@Customer'           ON INSERT ONLY,
+    'SERVICE'           = '@Service'            ON INSERT ONLY,
+    'PHYSICALSLOT'      = '@PhysicalSlot'       ON INSERT ONLY,
+    'PHYSICALPORT'      = '@PhysicalPort'       ON INSERT ONLY,
+    'PHYSICALCARD'      = '@PhysicalCard'       ON INSERT ONLY,
+    'TASKLIST'          = '@TaskList',
+    'NMOSSERIAL'        = '@NmosSerial'         ON INSERT ONLY,
+    'NMOSOBJINST'       = '@NmosObjInst'        ON INSERT ONLY,
+    'NMOSCAUSETYPE'     = '@NmosCauseType',
+    'LOCALNODEALIAS'    = '@LocalNodeAlias'     ON INSERT ONLY,
+    'LOCALPRIOBJ'       = '@LocalPriObj'        ON INSERT ONLY,
+    'LOCALSECOBJ'       = '@LocalSecObj'        ON INSERT ONLY,
+    'LOCALROOTOBJ'      = '@LocalRootObj'       ON INSERT ONLY,
+    'REMOTENODEALIAS'   = '@RemoteNodeAlias'    ON INSERT ONLY,
+    'REMOTEPRIOBJ'      = '@RemotePriObj'       ON INSERT ONLY,
+    'REMOTESECOBJ'      = '@RemoteSecObj'       ON INSERT ONLY,
+    'REMOTEROOTOBJ'     = '@RemoteRootObj'      ON INSERT ONLY,
+    'X733EVENTTYPE'     = '@X733EventType'      ON INSERT ONLY,
+    'X733PROBABLECAUSE' = '@X733ProbableCause',
+    'X733SPECIFICPROB'  = '@X733SpecificProb'   ON INSERT ONLY,
+    'X733CORRNOTIF'     = '@X733CorrNotif'      ON INSERT ONLY,
+    'ORIGINALSEVERITY'  = '@Severity'           ON INSERT ONLY,
+
+# NB do not concatenate additional values for ServerName and ServerSerial !	
+    'SERVERNAME'		= '@ServerName'		ON INSERT ONLY,
+    'SERVERSERIAL'		= '@ServerSerial'	ON INSERT ONLY
+);
+
+CREATE MAPPING JournalMap
+(
+    'SERIAL'            = '@Serial',
+    'USERID'            = '@UID',
+    'CHRONO'            = '@Chrono' CONVERT TO DATE,
+    'TEXT1'             = '@Text1',
+    'TEXT2'             = '@Text2',
+    'TEXT3'             = '@Text3',
+    'TEXT4'             = '@Text4',
+    'TEXT5'             = '@Text5',
+    'TEXT6'             = '@Text6',
+    'TEXT7'             = '@Text7',
+    'TEXT8'             = '@Text8',
+    'TEXT9'             = '@Text9',
+    'TEXT10'            = '@Text10',
+    'TEXT11'            = '@Text11',
+    'TEXT12'            = '@Text12',
+    'TEXT13'            = '@Text13',
+    'TEXT14'            = '@Text14',
+    'TEXT15'            = '@Text15',
+    'TEXT16'            = '@Text16',
+
+# NB do not concatenate additional values for ServerName and ServerSerial !	
+    'SERVERNAME'	= STATUS.SERVER_NAME,
+    'SERVERSERIAL'	= STATUS.SERVER_SERIAL
+);
+
+CREATE MAPPING DetailsMap
+(
+    'IDENTIFIER'        = '@Identifier',
+    'ATTRVAL'           = '@AttrVal',
+    'SEQUENCE'          = '@Sequence',
+    'NAME'              = '@Name',
+    'DETAIL'            = '@Detail',
+
+# NB do not concatenate additional values for ServerName and ServerSerial !	
+    'SERVERNAME'	= STATUS.SERVER_NAME,
+    'SERVERSERIAL'	= STATUS.SERVER_SERIAL
+);
+
+#
+# The following maps can be used when the gateway is run in REPORTER mode
+# and the example TRANSFER commands in the default jdbc.startup.cmd
+# are required - and uncommented.
+#
+
+CREATE MAPPING NamesMap
+(
+    'NAME'                 = '@Name',
+    'OWNERUID'             = '@UID',
+    'OWNERGID'             = '@GID',
+    'PASSWORD'             = '@Passwd',
+    'TYPE'                 = '@Type'
+);
+
+CREATE MAPPING GroupsMap
+(
+    'NAME'                = '@Name',
+    'OWNERGID'            = '@GID'
+);
+
+CREATE MAPPING MembersMap
+(
+    # Comment out OWNERKEY mapping if not required in the target schema
+    # Oracle at least doesn't define OWNERKEY in its reporting schema.
+    'OWNERKEY'            = TO_STRING('@UID') + ':' + TO_STRING('@GID'),
+    'OWNERUID'            = '@UID',
+    'OWNERGID'            = '@GID'
+);
+
+CREATE MAPPING ConversionsMap
+(
+    'CONVERSION_KEY'    = '@KeyField',
+    'COLUMN_NAME'       = '@Colname',
+    'VALUE'             = '@Value',
+    'CONVERSION'        = '@Conversion'
+);
+
+CREATE MAPPING ObjectClassesMap
+(
+    'CLASS'             = '@Tag',
+    'NAME'              = '@Name',
+    'ICON'              = '@Icon',
+    'MENU'              = '@Menu'
+);

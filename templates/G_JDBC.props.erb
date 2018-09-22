@@ -1,0 +1,127 @@
+#
+# Netcool/OMNIbus JDBC gateway
+#
+#(C) Copyright IBM Corp. 2011
+#
+#
+# Generic gateway properties
+# 
+#ConfigCryptoAlg: 'AES' # STRING (The cryptographic algorithm to use when encrypting and decrypting config values and files)
+#ConfigKeyFile: '' # STRING (Location of the file containing the key for encrypted config values and files)
+#Connections: 30 # INTEGER (Number of connections permitted)
+#MaxLogFileSize: 1024 # INTEGER (Maximum log file size in kbytes.)
+#MessageLevel: 'warn' # STRING (Message reporting level)
+#MessageLog: '$OMNIHOME/log/G_JDBC.log' # STRING (Path to the message log file.)
+#Name: 'G_JDBC' # STRING (Server name)
+#Props.CheckNames: TRUE # BOOLEAN (Cause program to abort if any property is not understood at the time it is read)
+#PropsFile: '$OMNIHOME/etc/G_JDBC.props' # STRING (Path to the property file.)
+#UniqueLog: FALSE # BOOLEAN (Make log file name unique (adds PID))
+#Gate.PAAware: 0 # UNSIGNED (Process agent aware respond ID.)
+#Gate.PAAwareName: '' # STRING (Name of process agent to return ID to.)
+#Gate.CacheHashTblSize: 5023 # UNSIGNED (Size of the hash tables used in the caches.)
+#Gate.G_JDBC.Debug: TRUE # BOOLEAN ([G_JDBC] Enable/Disable Java Gateway Reader/Writer debug messages.)
+#Gate.G_JDBC.FailbackEnabled: FALSE # BOOLEAN ([G_JDBC] Enable/Disable the failback to a primary system.)
+#Gate.G_JDBC.FailbackTimeout: 30 # UNSIGNED ([G_JDBC] Failback retry timeout in seconds.)
+#Gate.G_JDBC.ReconnectTimeout: 30 # UNSIGNED ([G_JDBC] Reconnection retry timeout in seconds.)
+#
+# Java environment properties
+#
+#Gate.Java.Arguments: '' # STRING ([Java] Arguments to the embedded JVM instance.)
+#Gate.Java.ClassPath: '$OMNIHOME/gates/java/nco_g_jdbc.jar:$OMNIHOME/gates/java/ngjava.jar' # STRING ([Java] Classpath setting for embedded JVM.)
+#Gate.Java.Debug: TRUE # BOOLEAN ([Java] Enable/Disable Java Gateway debug messages.)
+#Gate.Java.LibraryPath: '' # STRING ([Java] Library path for the embedded JVM instance.)
+#
+# Gateway framework properties
+#
+#Gate.MapFile: '$OMNIHOME/gates/jdbc/jdbc.map' # STRING (Path to data mapping file.)
+#Gate.Mapper.Debug: TRUE # BOOLEAN ([Mapper] Enable/Disable mapper debug messages.)
+#Gate.Mapper.ForwardHistoricDetails: FALSE # BOOLEAN ([Mapper] Enable/Disable forwarding of historic details.)
+#Gate.Mapper.ForwardHistoricJournals: FALSE # BOOLEAN ([Mapper] Enable/Disable forwarding of historic journals.)
+#Gate.NGtkDebug: TRUE # BOOLEAN (Enable/disable NGTK library debug messages.)
+#Gate.RdrWtr.BufferSize: 25 # UNSIGNED ([RdrWtr] Size of the SQL command buffer.)
+#Gate.RdrWtr.CommonNames: '' # STRING ([RdrWtr] List of acceptable Common Names for SSL Server Certificate)
+#Gate.RdrWtr.Debug: TRUE # BOOLEAN ([RdrWtr] Enable/Disable reader/writer debug messages.)
+#Gate.RdrWtr.DeleteIfNoDedup: FALSE # BOOLEAN ([RdrWtr] Delete entries only if they have not been de-duplicated.)
+#Gate.RdrWtr.Description: 'Gateway Reader/Writer' # STRING ([RdrWtr] Connection description.)
+#Gate.RdrWtr.DetailsTableName: 'alerts.details' # STRING ([RdrWtr] Name of the ObjectServer details table.)
+#Gate.RdrWtr.FailbackEnabled: FALSE # BOOLEAN ([RdrWtr] Enable/Disable the failback to a primary system.)
+#Gate.RdrWtr.FailbackTimeout: 30 # UNSIGNED ([RdrWtr] Failback retry timeout in seconds.)
+#Gate.RdrWtr.IducFlushRate: 0 # UNSIGNED ([RdrWtr] Local gateway IDUC change data flush rate.)
+#Gate.RdrWtr.JournalTableName: 'alerts.journal' # STRING ([RdrWtr] Name of the ObjectServer journal table.)
+#Gate.RdrWtr.LogOSSql: FALSE # BOOLEAN ([RdrWtr] Log all SQL sent to ObjectServer in debug mode.)
+#Gate.RdrWtr.Password: '' # STRING ([RdrWtr] Password of the user to connect as.)
+#Gate.RdrWtr.ReconnectTimeout: 30 # UNSIGNED ([RdrWtr] Reconnection retry timeout in seconds.)
+#Gate.RdrWtr.RefreshCacheOnUpdate: FALSE # BOOLEAN ([RdrWtr] Refresh the reader/writers cache on the start of an update.)
+#Gate.RdrWtr.Server: 'NCOMS' # STRING ([RdrWtr] Name of the ObjectServer to connect too.)
+#Gate.RdrWtr.StatusTableName: 'alerts.status' # STRING ([RdrWtr] Name of the ObjectServer status table.)
+#Gate.RdrWtr.TblReplicateDefFile: '$OMNIHOME/gates/jdbc/jdbc.rdrwtr.tblrep.def' # STRING ([RdrWtr] Path to table replication definition file.)
+#Gate.RdrWtr.UseBulkInsCmd: FALSE # BOOLEAN ([RdrWtr] Use the 'bulk' insert SQL command.)
+#Gate.RdrWtr.Username: 'root' # STRING ([RdrWtr] Name of the user to connect as.)
+#Gate.StartupCmdFile: '$OMNIHOME/gates/jdbc/jdbc.startup.cmd' # STRING (Path to startup commands file.)
+#Gate.Transfer.FailoverSyncRate: 60 # UNSIGNED (Failover sync rate in minutes.)
+#Gate.UnixAdminGrp: 'ncoadmin' # STRING (UNIX authentication admin group name.)
+#Gate.UsePamAuth: FALSE # BOOLEAN (Use PAM as authentication system.)
+#Gate.ResyncTables: '' # STRING (Additional tables to resync)
+#
+# IPC (ObjectServer connection) properties
+#
+#Ipc.QueueSize: 1024 # INTEGER (Size of middleware internal server queues)
+#Ipc.SingleThreaded: FALSE # BOOLEAN (Single Threaded IPC)
+#Ipc.SSLCertificate: '' # STRING (SSL certificate)
+#Ipc.SSLEnable: FALSE # BOOLEAN (Enable SSL)
+#Ipc.SSLPrivateKeyPassword: '' # STRING (Private key password)
+#Ipc.StackSize: 131072 # INTEGER (Size of middleware internal server thread stacks)
+#Ipc.Timeout: 60 # INTEGER (IPC Session timeout)
+#Ipc.TruncateVendorLogFile: TRUE # BOOLEAN (Truncate vendor log file on start up)
+#Ipc.VendorLogFileSize: 1024 # INTEGER (Maximum size of middleware vendor's log file (kB))
+#
+# JDBC gateway properties
+#
+# Gate.Jdbc.ActionCodeField: 'ACTIONCODE' # STRING (Target ActionCode field in audit mode)
+# Gate.Jdbc.ActionTimeField: 'ACTIONTIME' # STRING (Target ActionTime field in audit mode)
+# Gate.Jdbc.Connections: 3 # INTEGER (JDBC database connection count)
+# Gate.Jdbc.DeletedAtField: 'DELETEDAT' # STRING (Target DeletedAt field for alerts.status)
+# Gate.Jdbc.DetailsTableName: 'REPORTER_DETAILS' # STRING (Target table for alerts.details)
+# Gate.Jdbc.Driver: '' # STRING (JDBC Driver)
+# Gate.Jdbc.DupIgnore: 'LastModified StateChange' # STRING (Fields to ignore when de-duplicating updates)
+# Gate.Jdbc.FatalErrors: '0A 42' # STRING (SQLSTATE prefixes considered fatal when processing a batch)
+# Gate.Jdbc.InitializationString: '' # STRING (JDBC connection initialization string)
+# Gate.Jdbc.JournalTableName: 'REPORTER_JOURNAL' # STRING (Target table for alerts.journal)
+# Gate.Jdbc.MaxBatchSize: 250 # INTEGER (JDBC statement maximum batch row count)
+# Gate.Jdbc.Mode: 'REPORTING' # STRING (JDBC gateway mode (AUDIT|REPORTING))
+# Gate.Jdbc.OrderedWrites: 1 # INTEGER (Insert status table rows before journal and details rows)
+# Gate.Jdbc.PartitioningField: '' # STRING (Target Partitioning field)
+# Gate.Jdbc.Password: '' # STRING (JDBC password)
+# Gate.Jdbc.ReconnectTimeout: 30 # INTEGER (JDBC database reconnection timeout)
+# Gate.Jdbc.ResyncFilter: '' # STRING (Resync filter to find open events in target)
+# Gate.Jdbc.ResyncMode: 'AUTO' # STRING (Resync mode (NONE|UNI|BI|AUTO))
+# Gate.Jdbc.RetryErrors: '08 28 40 HYT' # STRING (SQLSTATE prefixes that denote that a batch should be retried)
+# Gate.Jdbc.ServerNameField: 'SERVERNAME' # STRING (Target ServerName field for alerts.status)
+# Gate.Jdbc.ServerSerialField: 'SERVERSERIAL' # STRING (Target ServerSerial field for alerts.status)
+# Gate.Jdbc.StatusTableName: 'REPORTER_STATUS' # STRING (Target table for alerts.status)
+# Gate.Jdbc.SuppressDeletes: FALSE # BOOLEAN (Suppress writing of alert deletes)
+# Gate.Jdbc.UnknownErrors: 'RECONNECT' # STRING (How to handle unknown SQL errors (RECONNECT|RETRY|ABORT|IGNORE))
+# Gate.Jdbc.Url: '' # STRING (JDBC connection URL)
+# Gate.Jdbc.Username: '' # STRING (JDBC username)
+
+#
+# Reporting mode properties
+#
+Gate.Jdbc.Mode: 'REPORTING' # STRING (JDBC gateway mode (AUDIT|REPORTING))
+
+# Table properties
+Gate.Jdbc.StatusTableName: 'REPORTER_STATUS' # STRING (Target table for alerts.status)
+Gate.Jdbc.JournalTableName: 'REPORTER_JOURNAL' # STRING (Target table for alerts.journal)
+Gate.Jdbc.DetailsTableName: 'REPORTER_DETAILS' # STRING (Target table for alerts.details)
+
+# JDBC Connection properties
+Gate.Jdbc.Driver: '' # STRING (JDBC Driver)
+Gate.Jdbc.Url: '' # STRING (JDBC connection URL)
+Gate.Jdbc.Username: '' # STRING (JDBC username)
+Gate.Jdbc.Password: '' # STRING (JDBC password)
+Gate.Jdbc.ReconnectTimeout: 30 # INTEGER (JDBC database reconnection timeout)
+Gate.Jdbc.InitializationString: '' # STRING (JDBC connection initialization string)
+
+# ObjectServer Connection properties
+Gate.RdrWtr.Username: 'root' # STRING ([RdrWtr] Name of the user to connect as.)
+Gate.RdrWtr.Password: '' # STRING ([RdrWtr] Password of the user to connect as.)

@@ -1,0 +1,23 @@
+#
+# Example startup command file for the JDBC Gateway.
+#
+#
+# Example Commands:-
+#
+#	GET CONFIG;
+#	SET LOG LEVEL TO debug;
+#	TRANSFER FROM 'master.names' TO 'reporter_users'
+#			VIA FILTER 'Name != \'nobody\''
+#			USING TRANSFER_MAP UsersMap;
+#
+
+#
+# The following commands may be required when the gateway is run in REPORTER 
+# mode. Uncomment them as required.
+#
+
+#TRANSFER FROM 'alerts.conversions' TO 'REPORTER_CONVERSIONS' DELETE USING TRANSFER_MAP ConversionsMap;
+#TRANSFER FROM 'alerts.objclass' TO 'REPORTER_CLASSES' DELETE USING TRANSFER_MAP ObjectClassesMap;
+#TRANSFER FROM 'master.groups' TO 'REPORTER_GROUPS' DELETE USING TRANSFER_MAP GroupsMap;
+#TRANSFER FROM 'master.members' TO 'REPORTER_MEMBERS' DELETE USING TRANSFER_MAP MembersMap;
+#TRANSFER FROM 'master.names' TO 'REPORTER_NAMES' DELETE USING TRANSFER_MAP NamesMap;
