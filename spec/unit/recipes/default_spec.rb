@@ -2,7 +2,7 @@
 # Cookbook:: objsrv
 # Spec:: default
 #
-# Copyright:: 2018, Ed Overton, All Rights Reserved.
+# Copyright:: 2018, Ed Overton
 
 require 'spec_helper'
 
