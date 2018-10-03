@@ -1,3 +1,9 @@
+set_hostname 'set objsrv server' do
+  host_ip   node['objsrv']['OSP']
+  host_name node['objsrv']['OS']
+  action :run
+end
+
 set_hostname 'set chefsrv server' do
   action :run
 end
