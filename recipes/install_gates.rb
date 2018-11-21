@@ -1,5 +1,5 @@
 # Install the Netcool tools defined between ()
-%w(nco-g-jdbc nco-g-bmc-remedy nco-g-jdbc-reporting-scripts).each do |tool|
+%w(jnetcool nco-g-jdbc nco-g-bmc-remedy nco-g-jdbc-reporting-scripts).each do |tool|
   install_tool 'do install tool' do
     tool_package node['nc_tools'][tool]['tool_package']
     tool_url node['nc_tools'][tool]['tool_url']
