@@ -29,4 +29,5 @@ suites:
       - recipe[objsrv::make_nc_os]
     verifier:
       inspec_tests:
-        - test/smoke/default
+        - test/integration/default
+    attributes:

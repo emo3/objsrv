@@ -1,0 +1,376 @@
+--###############################################################################
+--#
+--#    Licensed Materials - Property of IBM
+--#    "Restricted Materials of IBM"
+--#
+--#    5724-S44
+--#
+--#    (C) Copyright IBM Corp. 2005, 2012
+--#
+--#    Netcool Knowledge Library
+--#
+--#############################################################################
+--#
+--# 1.3 - Updated the AdvCorr triggers to
+--#       improve the performance of the trigger by narrowing down the 
+--#       number of events during table scan to only process events which is identified
+--#       as candidates in the alerts.AdvCorrLpcSymCand and alerts.AdvCorrLpcRcCand tables.
+--#       Create an index for LocalObjRelate column. 
+--#
+--# 1.2 - Updated to add a "when" condition on every AdvCorr trigger
+--#       to only run on primary object server to avoid race condition
+--#       which impacts object server's performance.
+--#       
+--# 1.1 - Updated to implement the use of seperate AdvCorrCauseType and
+--#       NmosCauseType fields, including the AdvCorr_SetCauseType automation,
+--#       which consolidates the values of both fields to set the CauseType
+--#       field.
+--#
+--#     - alerts.AdvCorrLpcSymCand and alerts.AdvCorrLpcRcCand tables changed
+--#       to virtual tables as they hold only temporary data. Virtual tables
+--#       eliminate any writes to disk and provide a slight performance
+--#       improvement.
+--#
+--# 1.0 - Initial Release.
+--#
+--#############################################################################
+--#
+--# This script is used to setup an OMNIbus 7.x ObjectServer to support the
+--# AdvCorr correlations. It installs:
+--#   - Automations (triggers and a trigger group)
+--#   - Additional Fields in alerts.status
+--#   - Additional Tables in the alerts database
+--#
+--# To install the AdvCorr correlation support run one of the following
+--# platform-dependent commands:
+--#
+--# Unix: 
+--#   $OMNIHOME/bin/nco_sql server <objectserver_name> user <username>
+--#   password <password> < <path_to_file>/advcorr.sql
+--#
+--# Windows:
+--#   %OMNIHOME%\bin\redist\isql.exe -S <objectserver name> -U <username> -P
+--#   <password> -i <path_to_file>\advcorr.sql
+--#
+--#############################################################################
+
+-- Drop triggers in case they already exists from a previous installation
+drop trigger AdvCorr_SetCauseType;
+go
+drop trigger AdvCorr_LPC_RC;
+go
+drop trigger AdvCorr_LPC_Sym;
+go
+
+-- Drop tables in case they already exists from a previous installation
+drop table alerts.AdvCorrLpcSymCand;
+go
+drop table alerts.AdvCorrLpcRcCand;
+go
+
+-- Create the table required by the AdvCorr automations.
+create table alerts.AdvCorrLpcSymCand virtual
+(
+    Identifier	varchar(255) primary key,
+    AdvCorrServerName	varchar(64),
+    AdvCorrServerSerial	int,
+    Node		varchar(64),
+    AdvCorrCauseType	int,
+    LocalNodeAlias	varchar(64),
+    LocalPriObj	varchar(255),
+    LocalSecObj	varchar(255),
+    LocalTertObj	varchar(255),
+    LocalRootObj	varchar(255),
+    LocalObjRelate	int
+);
+go
+
+create table alerts.AdvCorrLpcRcCand virtual
+(
+    Identifier	varchar(255) primary key,
+    ServerName	varchar(64),
+    ServerSerial	int,
+    Node		varchar(64),
+    AdvCorrCauseType	int,
+    LocalNodeAlias	varchar(64),
+    LocalPriObj	varchar(255),
+    LocalSecObj	varchar(255),
+    LocalTertObj	varchar(255),
+    LocalRootObj	varchar(255),
+    LocalObjRelate	int
+);
+go
+
+-- Add required fields to alerts.status
+alter table alerts.status add column LocalTertObj varchar(255);
+go
+alter table alerts.status add column LocalObjRelate int;
+go
+alter table alerts.status add column RemoteTertObj varchar(255);
+go
+alter table alerts.status add column RemoteObjRelate int;
+go
+alter table alerts.status add column CorrScore int;
+go
+alter table alerts.status add column CauseType int;
+go
+alter table alerts.status add column AdvCorrCauseType int;
+go
+alter table alerts.status add column AdvCorrServerName varchar(64);
+go
+alter table alerts.status add column AdvCorrServerSerial int;
+go
+
+-- Create conversions table
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('AdvCorrCauseType0', 'AdvCorrCauseType', 0, 'Unknown' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('AdvCorrCauseType1', 'AdvCorrCauseType', 1, 'Root cause' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('AdvCorrCauseType2', 'AdvCorrCauseType', 2, 'Symptom' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('AdvCorrCauseType3', 'AdvCorrCauseType', 3, 'Singularity');
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('AdvCorrCauseType4', 'AdvCorrCauseType', 4, 'Information' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('CauseType0', 'CauseType', 0, 'Unknown' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('CauseType1', 'CauseType', 1, 'Root cause' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('CauseType2', 'CauseType', 2, 'Symptom' );
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('CauseType3', 'CauseType', 3, 'Singularity');
+insert into alerts.conversions (KeyField, Colname, Value, Conversion) values ('CauseType4', 'CauseType', 4, 'Information' );
+go
+
+-- Create a hash index for LocalObjRelate
+create index localobjrelateIdx on alerts.status using hash (LocalObjRelate);
+go
+
+-- Add the AdvCorr automations
+create or replace trigger group AdvCorr;
+go
+
+create or replace trigger AdvCorr_LPC_Sym
+group AdvCorr
+priority 1
+every 17 seconds
+when get_prop_value('ActingPrimary')%='TRUE'
+begin
+  -- Populate Symptom Candidates table.
+  for each row SymCand in alerts.status where
+    SymCand.LocalObjRelate != 0
+      and
+    SymCand.Severity > 1
+      and
+    (SymCand.AdvCorrCauseType in (0,1) or (SymCand.AdvCorrCauseType = 2 and SymCand.AdvCorrServerSerial = 0))
+      and
+    SymCand.ProcessReq in (1,2,5,6,9,10)
+  begin
+    insert into alerts.AdvCorrLpcSymCand values (SymCand.Identifier,SymCand.AdvCorrServerName,SymCand.AdvCorrServerSerial,SymCand.Node,SymCand.AdvCorrCauseType,SymCand.LocalNodeAlias,SymCand.LocalPriObj,SymCand.LocalSecObj,SymCand.LocalTertObj,SymCand.LocalRootObj,SymCand.LocalObjRelate); 
+    update alerts.status via SymCand.Identifier set ProcessReq = ProcessReq - 1;
+  end;
+
+  -- For each potential Root Cause event mark the corresponding Symptom Candidates as symptoms.
+  for each row RcCand in alerts.status where
+    RcCand.LocalObjRelate != 0
+      and
+    RcCand.Severity > 1
+      and
+    RcCand.Type in (1,3,11)
+      and
+    RcCand.AdvCorrCauseType in (0,1,2)
+      and
+    (RcCand.Node in ( select Node from alerts.AdvCorrLpcSymCand ) 
+         or RcCand.LocalNodeAlias in 
+            ( select LocalNodeAlias from alerts.AdvCorrLpcSymCand where LocalNodeAlias != '' ))
+
+  begin
+    update alerts.AdvCorrLpcSymCand set AdvCorrCauseType = 2, AdvCorrServerName = RcCand.ServerName, AdvCorrServerSerial = RcCand.ServerSerial where
+      (AdvCorrCauseType != 2 or AdvCorrServerSerial = 0)
+        and
+      ( Node = RcCand.Node
+          or
+        ( LocalNodeAlias != ''
+            and
+          LocalNodeAlias = RcCand.LocalNodeAlias
+        )
+      )
+        and
+      (
+        (
+          LocalObjRelate in (3,7,11,15,19,23,27,31,35,39,43,47,51,55,59,63) -- SymCand LRO is a Parent of LPO
+            and
+          (
+            LocalRootObj = RcCand.LocalPriObj
+              or
+            (
+              RcCand.LocalObjRelate in (2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62) -- RcCand LRO is an Alias of LPO
+                and
+              LocalRootObj = RcCand.LocalRootObj
+            )
+              or
+            (
+              RcCand.LocalObjRelate in (32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47) -- RcCand LSO is an Alias of LPO
+                and
+              LocalRootObj = RcCand.LocalSecObj
+            )
+          )
+        )
+          or
+        (
+          LocalObjRelate in (48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63) -- SymCand LSO is a Parent of LPO
+            and
+          (
+            LocalSecObj = RcCand.LocalPriObj
+              or
+            (
+              RcCand.LocalObjRelate in (2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62) -- RcCand LRO is an Alias of LPO
+                and
+              LocalSecObj = RcCand.LocalRootObj
+            )
+              or
+            (
+              RcCand.LocalObjRelate in (32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47) -- RcCand LSO is an Alias of LPO
+                and
+              LocalSecObj = RcCand.LocalSecObj
+            )
+          )
+        )
+      );
+  end;
+
+  -- Update new Symptoms in alerts.status
+  for each row Symptom in alerts.AdvCorrLpcSymCand where Symptom.AdvCorrCauseType = 2
+  begin
+    update alerts.status via Symptom.Identifier set AdvCorrCauseType = 2, ProcessReq = 0, AdvCorrServerName = Symptom.AdvCorrServerName, AdvCorrServerSerial = Symptom.AdvCorrServerSerial where AdvCorrCauseType in (0,1) or AdvCorrServerSerial = 0;
+  end;
+
+  -- Remove all entries from Symptom Candidates table
+  delete from alerts.AdvCorrLpcSymCand;
+end;
+go
+
+create or replace trigger AdvCorr_LPC_RC
+group AdvCorr
+priority 1
+every 17 seconds
+when get_prop_value('ActingPrimary')%='TRUE'
+begin
+  -- Populate Root Cause Candidates table.
+  for each row RcCand in alerts.status where
+    RcCand.LocalObjRelate != 0
+      and
+    RcCand.Severity > 1
+      and
+    RcCand.AdvCorrCauseType = 0
+      and
+    RcCand.ProcessReq in (4,5,8,9)
+  begin
+    insert into alerts.AdvCorrLpcRcCand values (RcCand.Identifier,RcCand.ServerName,RcCand.ServerSerial,RcCand.Node,RcCand.AdvCorrCauseType,RcCand.LocalNodeAlias,RcCand.LocalPriObj,RcCand.LocalSecObj,RcCand.LocalTertObj,RcCand.LocalRootObj,RcCand.LocalObjRelate);
+    update alerts.status via RcCand.Identifier set ProcessReq = ProcessReq - 4;
+  end;
+
+  -- For each potential Symptom event mark the corresponding Root Cause Candidates as root causes.
+  for each row SymCand in alerts.status where
+    SymCand.LocalObjRelate != 0
+      and
+    SymCand.Severity > 1
+      and
+    SymCand.Type in (1,3,11,12)
+      and
+    SymCand.AdvCorrCauseType in (0,1,2)
+      and
+    SymCand.LocalObjRelate in (3,7,11,12,13,14,15,19,23,27,28,29,30,31,35,39,43,44,45,46,47,51,55,59,60,61,62,63)
+      and
+    (SymCand.Node in ( select Node from alerts.AdvCorrLpcRcCand ) 
+         or SymCand.LocalNodeAlias in 
+            ( select LocalNodeAlias from alerts.AdvCorrLpcRcCand where LocalNodeAlias != '' ))
+
+  begin
+    update alerts.AdvCorrLpcRcCand set AdvCorrCauseType = 1 where
+      AdvCorrCauseType = 0
+        and
+      (
+        Node = SymCand.Node
+          or
+        (
+          LocalNodeAlias != ''
+            and
+          LocalNodeAlias = SymCand.LocalNodeAlias
+        )
+      )
+        and
+      (
+        (
+          SymCand.LocalObjRelate in (3,7,11,15,19,23,27,31,35,39,43,47,51,55,59,63) -- SymCand LRO is a Parent of LPO
+            and
+          (
+            LocalPriObj = SymCand.LocalRootObj
+              or
+            (
+              LocalObjRelate in (2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62) -- RcCand LRO is an Alias of LPO
+                and
+              LocalRootObj = SymCand.LocalRootObj
+            )
+              or
+            (
+              LocalObjRelate in (32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47) -- RcCand LSO is an Alias of LPO
+                and
+              LocalSecObj = SymCand.LocalRootObj
+            )
+          )
+        )
+          or
+        (
+          SymCand.LocalObjRelate in (48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63) -- SymCand LSO is a Parent of LPO
+            and
+          (
+            LocalPriObj = SymCand.LocalSecObj
+              or
+            (
+              LocalObjRelate in (2,6,10,14,18,22,26,30,34,38,42,46,50,54,58,62) -- RcCand LRO is an Alias of LPO
+                and
+              LocalRootObj = SymCand.LocalSecObj
+            )
+              or
+            (
+              LocalObjRelate in (32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47) -- RcCand LSO is an Alias of LPO
+                and
+              LocalSecObj = SymCand.LocalSecObj
+            )
+          )
+        )
+      );
+  end;
+
+  -- Update new Root Causes in alerts.status
+  for each row RootCause in alerts.AdvCorrLpcRcCand where RootCause.AdvCorrCauseType = 1
+  begin
+    update alerts.status via RootCause.Identifier set AdvCorrCauseType = 1,ProcessReq = 0 where
+      AdvCorrCauseType = 0
+        and
+      LocalObjRelate not in (3,7,11,12,13,14,15,19,23,27,28,29,30,31,35,39,43,44,45,46,47,51,55,59,60,61,62,63);
+    update alerts.status via RootCause.Identifier set AdvCorrCauseType = 1,ProcessReq = 2 where
+      AdvCorrCauseType = 0
+        and
+      LocalObjRelate in (3,7,11,12,13,14,15,19,23,27,28,29,30,31,35,39,43,44,45,46,47,51,55,59,60,61,62,63);
+  end;
+
+  -- Remove all entries from Root Cause Candidates table
+  delete from alerts.AdvCorrLpcRcCand;
+end;
+go
+
+create or replace trigger AdvCorr_SetCauseType
+group AdvCorr
+priority 1
+before update on alerts.status
+for each row
+when get_prop_value('ActingPrimary')%='TRUE'
+begin
+  if(new.AdvCorrCauseType = 0) then set new.CauseType = new.NmosCauseType; -- If AdvCorrCauseType is 'unknown' set to value of NmosCauseType
+  else
+    if(new.NmosCauseType = 0) then set new.CauseType = new.AdvCorrCauseType; -- If NmosCauseType is 'unknown' set to value of AdvCorrCauseType
+    else
+      if((new.AdvCorrCauseType = 2) or (new.NmosCauseType = 2)) then set new.CauseType = 2; -- If either AdvCorrCauseType or NmosCauseType are 'symptom' set to 'symptom'
+      else
+        if(new.NmosCauseType = 1) then set new.CauseType = 1; -- If NmosCauseType is 'Root Cause' set to 'Root Cause'
+        else set new.CauseType = old.CauseType; -- Leave CauseType unchanged
+        end if;
+      end if;
+    end if;
+  end if;
+end;
+go

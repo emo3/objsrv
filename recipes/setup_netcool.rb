@@ -1,3 +1,4 @@
+# set the IP and ObjSrv name
 set_hostname 'set objsrv server' do
   host_ip   node['objsrv']['OSP']
   host_name node['objsrv']['OS']
@@ -189,15 +190,10 @@ service 'nco_pa' do
   action [:enable, :start]
 end
 
-# copy Netcool rules installed to $NCHOME
-execute 'copy_rules' do
-  command "cp -r #{node['objsrv']['app_dir']}/NcKL/rules \
-    #{node['objsrv']['nc_dir']}/rules"
-  cwd node['objsrv']['nc_dir']
-  user node['objsrv']['nc_act']
-  group node['objsrv']['nc_grp']
-  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
-  action :run
+# create setup object server for Advanced correlation
+template "#{node['objsrv']['ob_dir']}/advcorr.sql" do
+  source 'advcorr.sql.erb'
+  mode 0755
 end
 
 # setup object server for Advanced correlation
@@ -206,7 +202,7 @@ execute 'run_advcorr' do
   -server #{node['objsrv']['ncoms']} \
   -user root \
   -password '#{node['objsrv']['root_pwd']}' \
-  -input #{node['objsrv']['app_dir']}/NcKL/advcorr.sql"
+  -input #{node['objsrv']['ob_dir']}/advcorr.sql"
   cwd "#{node['objsrv']['ob_dir']}/bin"
   not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
   # The nco_sql will have error always
