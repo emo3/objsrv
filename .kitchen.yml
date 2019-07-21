@@ -8,7 +8,7 @@ driver:
     name: <%= ENV['OS'] %>
     createhd:
       - filename: disk1.vmdk
-        size: 122880
+        size: <%= ENV['OSD'] %>
     storagectl:
       - name: SATA Controller
         portcount: 1
