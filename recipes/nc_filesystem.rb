@@ -9,7 +9,7 @@ directory node['objsrv']['app_dir'] do
 end
 
 create_xfs 'create netcool extra file system' do
-  lv_size   '60G'
+  lv_size   node['OSG']
   lv_name   node['objsrv']['lv_name']
   mnt_point node['objsrv']['app_dir']
   action :run
