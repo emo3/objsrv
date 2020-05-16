@@ -34,15 +34,6 @@ Also, tailor the subsections below:
 
 ## Usage
 
-The following environmental variables must be defined:
-  OS  = Object Server Name: nco
-  OSR = Ram for Server: 2048
-  OSC = CPUs for Server: 1
-  OSD = Disk Size for Server: 40960
-  OSP = Server IP: 10.1.1.40
-  chef_release = Version of Chef: 15.1.36
-  OSG = Disk Size in Gigs: 40G
-
 Todo: This will be unique depending on how the cookbook is developed and the
 tools it provides to configure nodes. Here's a simple example of using a
 cookbook and it's recipe. You'll want to elaborate on your own steps and include

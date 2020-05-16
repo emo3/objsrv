@@ -1,14 +1,12 @@
 ---
 driver:
   name: vagrant
-  vm_hostname: <%= ENV['OS'] %>
   customize:
-    memory: <%= ENV['OSR'] %>
-    cpus: <%= ENV['OSC'] %>
-    name: <%= ENV['OS'] %>
+    memory: 2048
+    cpus: 1
     createhd:
       - filename: disk1.vmdk
-        size: <%= ENV['OSD'] %>
+        size: 40961
     storagectl:
       - name: SATA Controller
         portcount: 1
@@ -19,12 +17,12 @@ driver:
         type: hdd
         medium: disk1.vmdk
   network:
-   - ['private_network', ip: <%= ENV['OSP'] %>]
+   - ['private_network', ip: '10.1.1.40']
 
 provisioner:
   name: chef_zero
   product_name: chef
-  product_version: <%= ENV['chef_release'] %>
+  product_version: 15.9.17
   install_strategy: once
 
 verifier:
@@ -33,15 +31,10 @@ verifier:
 platforms:
   - name: mycentos7
     provisioner:
-      download_url: http://10.1.1.30/media/chef-<%= ENV['chef_release'] %>-1.el7.x86_64.rpm
+      download_url: http://10.1.1.30/media/chef-15.9.17-1.el7.x86_64.rpm
 
 suites:
   - name: objsrv
-    run_list:
-#      - recipe[objsrv::do_prs]
-      - recipe[objsrv::make_nc_os]
     verifier:
       inspec_tests:
         - test/integration/default
-    attributes:
-      OSG: '<%= ENV['OSG'] %>'
