@@ -11,3 +11,27 @@
     action :install
   end
 end
+
+# cmd tool file
+a = []
+%w(nco-g-jdbc nco-g-bmc-remedy).each do |cmd|
+  template "#{node['objsrv']['nc_home']}/ncprofile-c" do
+    source 'ncprofilec.erb'
+    variables(
+      procmd:  node['nc_tools'][cmd]['tool_cmd'],
+      pa_name: node['objsrv']['os_pa_name'],
+      nc_act:  node['objsrv']['nc_act'],
+      nc_pwd:  node['objsrv']['nc_pwd'],
+      prosrv:  node['nc_tools'][cmd]['tool_srv']
+    )
+    owner node['objsrv']['nc_act']
+    group node['objsrv']['nc_grp']
+    mode '0755'
+  end
+end
+# %w(nco-g-jdbc nco-g-bmc-remedy).each do |cmd|
+#   execute "create-tool-cmd for #{cmd}" do
+#     command "echo #{node['nc_tools'][cmd]['tool_cmd']} >> #{node['nc_tools']['nc_home']}/ncprofile-c"
+#     action :run
+#   end
+# end
