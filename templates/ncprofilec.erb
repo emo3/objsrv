@@ -1,4 +1,4 @@
 <% @tools.each do |tool| -%>
-alias start_<%= tool.procmd %>="$OMNIHOME/bin/nco_pa_start -server <%= tool.pa_name %> -user <%= tool.nc_act %> -password <%= tool.nc_pwd %> -process Primary<%= tool.prosrv %>"
-alias stop_<%= tool.procmd %>="$OMNIHOME/bin/nco_pa_stop -server <%= tool.pa_name %> -user <%= tool.nc_act %> -password <%= tool.nc_pwd %> -process Primary<%= tool.prosrv %>"
+alias start_<%= tool['tool_cmd'] %>="$OMNIHOME/bin/nco_pa_start -server <%= tool['pa_name'] %> -user <%= tool['nc_act'] %> -password <%= tool['nc_pwd'] %> -process Primary<%= tool['tool_srv'] %>"
+alias stop_<%= tool['tool_cmd'] %>="$OMNIHOME/bin/nco_pa_stop -server <%= tool['pa_name'] %> -user <%= tool['nc_act'] %> -password <%= tool['nc_pwd'] %> -process Primary<%= tool['tool_srv'] %>"
 <% end -%>
