@@ -19,7 +19,7 @@ log '**** ^^^^ ####'
   tcmd << node['nc_tools'][cmd].merge({'pa_name' => node['objsrv']['os_pa_name']})
 end
 
-log "#{tcmd}"
+log tcmd
 template "#{node['objsrv']['nc_home']}/ncprofile-c" do
   source 'ncprofilec.erb'
   variables(
