@@ -16,17 +16,10 @@ end
 tcmd = []
 log '**** ^^^^ ####'
 %w(nco-g-jdbc nco-g-bmc-remedy).each do |cmd|
-  t1 = node['nc_tools'][cmd].merge({'pa_name' => node['objsrv']['os_pa_name']})
-  log "2#{t1}"
-  # log "h1#{h1}"
-  t3 = {'nc_act' => node['objsrv']['nc_act']}
-  # h1 = t1[cmd].merge(t3)
-  log "3#{t3}"
-  t4 = {'nc_pwd' => node['objsrv']['nc_pwd']}
-  log "4#{t4}"
+  tcmd << node['nc_tools'][cmd].merge({'pa_name' => node['objsrv']['os_pa_name']})
 end
 
-log "4#{tcmd}"
+log "#{tcmd}"
 template "#{node['objsrv']['nc_home']}/ncprofile-c" do
   source 'ncprofilec.erb'
   variables(
