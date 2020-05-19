@@ -14,26 +14,20 @@ end
 
 # cmd tool file
 tcmd = []
-log '**** ^^^^ ####'
 %w(nco-g-jdbc nco-g-bmc-remedy).each do |cmd|
-  tcmd << node['nc_tools'][cmd].merge({'pa_name' => node['objsrv']['os_pa_name']})
+  tcmd << node['nc_tools'][cmd].merge(\
+    {'pa_name' => node['objsrv']['os_pa_name']}).merge(\
+    {'nc_act' => node['objsrv']['nc_act']}).merge(\
+    {'nc_pwd' => node['objsrv']['nc_pwd']})
 end
 
-log tcmd
 template "#{node['objsrv']['nc_home']}/ncprofile-c" do
   source 'ncprofilec.erb'
   variables(
     tools: tcmd
   )
-#  sensitive true
+  sensitive true
   owner node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode '0755'
 end
-
-# %w(nco-g-jdbc nco-g-bmc-remedy).each do |cmd|
-#   execute "create-tool-cmd for #{cmd}" do
-#     command "echo #{node['nc_tools'][cmd]['tool_cmd']} >> #{node['nc_tools']['nc_home']}/ncprofile-c"
-#     action :run
-#   end
-# end
