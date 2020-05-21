@@ -85,7 +85,7 @@
 # Store.LocalizedSortCaseSensitive: 'OFF' 		# STRING (Localized sort case insensitively:OFF; lowercase first:LOWERFIRST; uppercase first:UPPERFIRST.)
 # UniqueLog: FALSE 					# BOOLEAN (Make log file name unique (adds PID))
 
-ActingPrimary: TRUE
+ActingPrimary: <%= node['objsrv']['obs_acting'] %>
 AlertSecurityModel: 0
 AllowConnections: TRUE
 AllowISQL: TRUE
@@ -94,7 +94,7 @@ AllowTimedRefresh: FALSE
 Auto.Debug: FALSE
 Auto.Enabled: TRUE
 Auto.StatsInterval: 60
-BackupObjectServer: FALSE
+BackupObjectServer: <%= node['objsrv']['obs_backup'] %>
 ClientHeartbeatDisable: FALSE
 ClientHeartbeatRate: 10
 ConfigCryptoAlg: 'AES'

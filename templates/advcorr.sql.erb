@@ -12,15 +12,15 @@
 --#############################################################################
 --#
 --# 1.3 - Updated the AdvCorr triggers to
---#       improve the performance of the trigger by narrowing down the 
+--#       improve the performance of the trigger by narrowing down the
 --#       number of events during table scan to only process events which is identified
 --#       as candidates in the alerts.AdvCorrLpcSymCand and alerts.AdvCorrLpcRcCand tables.
---#       Create an index for LocalObjRelate column. 
+--#       Create an index for LocalObjRelate column.
 --#
 --# 1.2 - Updated to add a "when" condition on every AdvCorr trigger
 --#       to only run on primary object server to avoid race condition
 --#       which impacts object server's performance.
---#       
+--#
 --# 1.1 - Updated to implement the use of seperate AdvCorrCauseType and
 --#       NmosCauseType fields, including the AdvCorr_SetCauseType automation,
 --#       which consolidates the values of both fields to set the CauseType
@@ -44,7 +44,7 @@
 --# To install the AdvCorr correlation support run one of the following
 --# platform-dependent commands:
 --#
---# Unix: 
+--# Unix:
 --#   $OMNIHOME/bin/nco_sql server <objectserver_name> user <username>
 --#   password <password> < <path_to_file>/advcorr.sql
 --#
@@ -146,7 +146,7 @@ create or replace trigger AdvCorr_LPC_Sym
 group AdvCorr
 priority 1
 every 17 seconds
-when get_prop_value('ActingPrimary')%='TRUE'
+when get_prop_value('ActingPrimary')%='<%= node['objsrv']['obs_acting'] %>'
 begin
   -- Populate Symptom Candidates table.
   for each row SymCand in alerts.status where
@@ -158,7 +158,7 @@ begin
       and
     SymCand.ProcessReq in (1,2,5,6,9,10)
   begin
-    insert into alerts.AdvCorrLpcSymCand values (SymCand.Identifier,SymCand.AdvCorrServerName,SymCand.AdvCorrServerSerial,SymCand.Node,SymCand.AdvCorrCauseType,SymCand.LocalNodeAlias,SymCand.LocalPriObj,SymCand.LocalSecObj,SymCand.LocalTertObj,SymCand.LocalRootObj,SymCand.LocalObjRelate); 
+    insert into alerts.AdvCorrLpcSymCand values (SymCand.Identifier,SymCand.AdvCorrServerName,SymCand.AdvCorrServerSerial,SymCand.Node,SymCand.AdvCorrCauseType,SymCand.LocalNodeAlias,SymCand.LocalPriObj,SymCand.LocalSecObj,SymCand.LocalTertObj,SymCand.LocalRootObj,SymCand.LocalObjRelate);
     update alerts.status via SymCand.Identifier set ProcessReq = ProcessReq - 1;
   end;
 
@@ -172,8 +172,8 @@ begin
       and
     RcCand.AdvCorrCauseType in (0,1,2)
       and
-    (RcCand.Node in ( select Node from alerts.AdvCorrLpcSymCand ) 
-         or RcCand.LocalNodeAlias in 
+    (RcCand.Node in ( select Node from alerts.AdvCorrLpcSymCand )
+         or RcCand.LocalNodeAlias in
             ( select LocalNodeAlias from alerts.AdvCorrLpcSymCand where LocalNodeAlias != '' ))
 
   begin
@@ -246,7 +246,7 @@ create or replace trigger AdvCorr_LPC_RC
 group AdvCorr
 priority 1
 every 17 seconds
-when get_prop_value('ActingPrimary')%='TRUE'
+when get_prop_value('ActingPrimary')%='<%= node['objsrv']['obs_acting'] %>'
 begin
   -- Populate Root Cause Candidates table.
   for each row RcCand in alerts.status where
@@ -274,8 +274,8 @@ begin
       and
     SymCand.LocalObjRelate in (3,7,11,12,13,14,15,19,23,27,28,29,30,31,35,39,43,44,45,46,47,51,55,59,60,61,62,63)
       and
-    (SymCand.Node in ( select Node from alerts.AdvCorrLpcRcCand ) 
-         or SymCand.LocalNodeAlias in 
+    (SymCand.Node in ( select Node from alerts.AdvCorrLpcRcCand )
+         or SymCand.LocalNodeAlias in
             ( select LocalNodeAlias from alerts.AdvCorrLpcRcCand where LocalNodeAlias != '' ))
 
   begin
@@ -358,7 +358,7 @@ group AdvCorr
 priority 1
 before update on alerts.status
 for each row
-when get_prop_value('ActingPrimary')%='TRUE'
+when get_prop_value('ActingPrimary')%='<%= node['objsrv']['obs_acting'] %>'
 begin
   if(new.AdvCorrCauseType = 0) then set new.CauseType = new.NmosCauseType; -- If AdvCorrCauseType is 'unknown' set to value of NmosCauseType
   else
