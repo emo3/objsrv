@@ -1,4 +1,3 @@
-alias check_mttrapd="$OMNIHOME/probes/nco_p_syntax -server <%= node['objsrv']['ncoms'] %> -rulesfile $NC_RULES_HOME/<%= node['objsrv']['rules_file'] %>"
 alias status_pa="$OMNIHOME/bin/nco_pa_status -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %>"
 alias shut_pa="$OMNIHOME/bin/nco_pa_shutdown -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %> -process <%= node['objsrv']['obs_domain'] %><%= node['objsrv']['obs_type'] %>"
 alias start_os="$OMNIHOME/bin/nco_pa_start -server <%= node['objsrv']['os_pa_name'] %> -user <%= node['objsrv']['nc_act'] %> -password <%= node['objsrv']['nc_pwd'] %> -process <%= node['objsrv']['obs_domain'] %><%= node['objsrv']['obs_type'] %>"
