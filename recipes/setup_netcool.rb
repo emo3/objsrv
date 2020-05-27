@@ -149,13 +149,13 @@ file "#{node['objsrv']['temp_dir']}/shutdown.sql" do
 end
 
 # create configuration files for PA
-template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.conf" do
+template "#{node['objsrv']['ob_dir']}/etc/nco_pa.conf" do
   source 'nco_pa.conf.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   mode 0444
 end
-template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['os_pa_name']}.props" do
+template "#{node['objsrv']['ob_dir']}/etc/nco_pa.props" do
   source 'nco_pa.props.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
