@@ -15,6 +15,7 @@ default['objsrv'].tap do |obs|
   obs['obs_acting']  = 'TRUE'
   obs['obs_backup']  = 'FALSE'
   obs['ncoms']       = 'NCO'
+  obs['arch']        = 'linux2x86'
   obs['OS']          = 'nco'
   obs['OSP']         = '10.1.1.40'
   obs['PS']          = 'ncp'
@@ -31,10 +32,6 @@ default['objsrv'].tap do |obs|
   obs['bi_port']     = '4300'
   obs['remedy_port'] = '4301'
   obs['tdw_port']    = '4302'
-  obs['mrules_file']  = 'snmptrap.rules'
-  obs['erules_file']  = 'tivoli_eif.rules'
-  obs['rdy_dir']     = "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['remedy']}"
-  obs['tdw_dir']     = "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['tdw']}"
   obs['root_pwd']    = 'nc0Adm1n'
   obs['pa_epwd']     = '@44:GlEwL3cFaU+Pfjcm5S7xNs00PubYXnWhTqEVDtgvUjo=@'
   obs['encryption']  = 'AES'
