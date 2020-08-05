@@ -33,6 +33,11 @@ depends 'server_utils'
 
 ## Usage
 
+The following environmental variables must be defined:
+	HDPATH - The directory where extra hard disk volumes are stored
+	chef_release - The version of chef client you want to use
+		This version must be avaliable
+
 Todo: This will be unique depending on how the cookbook is developed and the
 tools it provides to configure nodes. Here's a simple example of using a
 cookbook and it's recipe. You'll want to elaborate on your own steps and include
