@@ -2,3 +2,4 @@
 yum -y groupinstall 'KDE' 'X Window System'
 systemctl set-default graphical.target
 reboot
+https://packages.chef.io/files/stable/chef/15.14.0/el/7/chef-15.14.0-1.el7.x86_64.rpm

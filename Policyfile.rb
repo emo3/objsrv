@@ -14,6 +14,7 @@ run_list 'objsrv::make_nc_os'
 
 # Specify a custom source for a single cookbook:
 cookbook 'objsrv',       path: '.'
-cookbook 'nc_base',      git: 'https://github.com/emo3/nc_base.git'
+#cookbook 'nc_base',      git: 'https://github.com/emo3/nc_base.git'
+cookbook 'nc_base',      path: '../nc_base'
 cookbook 'nc_tools',     git: 'https://github.com/emo3/nc_tools.git'
 cookbook 'server_utils', git: 'https://github.com/emo3/server_utils.git'
