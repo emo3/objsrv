@@ -1,7 +1,7 @@
 name 'objsrv'
 maintainer 'Ed Overton'
 maintainer_email 'bogus@gmail.com'
-license 'Apache 2.0'
+license 'Apache-2.0'
 description 'Installs/Configures objsrv'
 long_description 'Installs/Configures objsrv'
 version '0.5'
