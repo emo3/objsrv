@@ -21,14 +21,14 @@ template "#{node['objsrv']['nc_dir']}/etc/omni.dat" do
   source 'omni.dat.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  mode 0664
+  mode '0664'
 end
 
 # create the interface file
 execute 'create_interface' do
   command "#{node['objsrv']['nc_dir']}/bin/nco_igen"
   cwd "#{node['objsrv']['nc_dir']}/bin"
-  not_if { File.exist?("#{node['objsrv']['nc_dir']}/etc/interfaces.linux2x86") }
+  not_if { ::File.exist?("#{node['objsrv']['nc_dir']}/etc/interfaces.linux2x86") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   action :run
@@ -40,7 +40,7 @@ execute 'create_objsrv' do
   -server #{node['objsrv']['ncoms']} \
   -force"
   cwd "#{node['objsrv']['ob_dir']}/bin"
-  not_if { File.exist?("#{node['objsrv']['ob_dir']}/db/#{node['objsrv']['ncoms']}/master_store.tab") }
+  not_if { ::File.exist?("#{node['objsrv']['ob_dir']}/db/#{node['objsrv']['ncoms']}/master_store.tab") }
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   action :run
@@ -51,7 +51,7 @@ template "#{node['objsrv']['ob_dir']}/etc/#{node['objsrv']['ncoms']}.props" do
   source 'ncoms.props.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  mode 0444
+  mode '0444'
 end
 
 # start the object server
@@ -65,7 +65,7 @@ bash 'run_objsrv' do
     # Give time for the Object Server to come up completely
     sleep 5
   EOH
-  not_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  not_if { ::File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
   action :run
 end
 
@@ -75,7 +75,7 @@ template "#{node['objsrv']['temp_dir']}/create_user.sql" do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   sensitive true
-  mode 0440
+  mode '0440'
 end
 
 # Create user netcool within Object Server
@@ -85,7 +85,7 @@ execute 'create_netcool' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/create_user.sql"
-  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  not_if { ::File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
   sensitive true
   action :run
 end
@@ -100,7 +100,7 @@ template "#{node['objsrv']['temp_dir']}/set_rpwd.sql" do
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
   sensitive true
-  mode 0440
+  mode '0440'
 end
 
 # Change root password
@@ -110,7 +110,7 @@ execute 'change_root' do
   -user root \
   -password '' \
   -input #{node['objsrv']['temp_dir']}/set_rpwd.sql"
-  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  not_if { ::File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
   sensitive true
   action :run
 end
@@ -125,8 +125,8 @@ template "#{node['objsrv']['temp_dir']}/shutdown.sql" do
   source 'shutdown.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
-  mode 0444
+  only_if { ::File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  mode '0444'
 end
 
 # shutdown object server
@@ -137,7 +137,7 @@ execute 'shutdown_objsrv' do
   -password '#{node['objsrv']['root_pwd']}' \
   -input #{node['objsrv']['temp_dir']}/shutdown.sql"
   cwd "#{node['objsrv']['ob_dir']}/bin"
-  only_if { File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
+  only_if { ::File.exist?("#{node['objsrv']['ob_dir']}/var/#{node['objsrv']['ncoms']}.pid") }
   # The nco_sql will exit with error always
   returns [0, 255]
   sensitive true
@@ -153,36 +153,36 @@ template "#{node['objsrv']['ob_dir']}/etc/nco_pa.conf" do
   source 'nco_pa.conf.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  mode 0444
+  mode '0444'
 end
 template "#{node['objsrv']['ob_dir']}/etc/nco_pa.props" do
   source 'nco_pa.props.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  mode 0444
+  mode '0444'
 end
 
 ## create files for PAM
 # netcool
 template '/etc/pam.d/netcool' do
   source 'netcool.erb'
-  mode 0644
+  mode '0644'
 end
 # object server
 template '/etc/pam.d/nco_objserv' do
   source 'nco_objserv.erb'
-  mode 0644
+  mode '0644'
 end
 
 # This is so PAD can read shadow file
 file '/etc/shadow' do
-  mode 0004
+  mode '0004'
 end
 
 # create setup script for netcool applications
 template '/etc/init.d/nco_pa' do
   source 'nco_pa.erb'
-  mode 0755
+  mode '0755'
 end
 
 # add script to system configuration
@@ -193,7 +193,7 @@ end
 # create setup object server for Advanced correlation
 template "#{node['objsrv']['ob_dir']}/advcorr.sql" do
   source 'advcorr.sql.erb'
-  mode 0755
+  mode '0755'
 end
 
 # setup object server for Advanced correlation
@@ -204,7 +204,7 @@ execute 'run_advcorr' do
   -password '#{node['objsrv']['root_pwd']}' \
   -input #{node['objsrv']['ob_dir']}/advcorr.sql"
   cwd "#{node['objsrv']['ob_dir']}/bin"
-  not_if { File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
+  not_if { ::File.exist?("#{node['objsrv']['ob_dir']}/verify_nc.sql") }
   # The nco_sql will have error always
   # returns [0, 255]
   action :run
@@ -215,7 +215,7 @@ template "#{node['objsrv']['ob_dir']}/verify_nc.sql" do
   source 'verify_nc.sql.erb'
   user node['objsrv']['nc_act']
   group node['objsrv']['nc_grp']
-  mode 0444
+  mode '0444'
 end
 
 template "#{node['objsrv']['nc_home']}/.bash_profile" do

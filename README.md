@@ -11,11 +11,10 @@ supported?
 
 ## Requirements
 
-Todo: List any technical requirements for using this cookbook. Do you need to
-install binaries from the network? Does the cookbook make other assumptions
-about the environment for it to be used? Does the operating system need to have
-any special configuration before using this cookbook (i.e. disable selinux)?
-Also, tailor the subsections below:
+The following environmental variables must be defined:<br>
+  Chef_Release = The version of Chef Client to use<br>
+  RepoDir = Full path directory on local system where the repos are stored<br>
+  HDPATH = Full path directory to store additional HDs<br>
 
 ### Platforms
 

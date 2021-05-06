@@ -16,9 +16,9 @@ end
 tcmd = []
 %w(nco-g-jdbc nco-g-bmc-remedy).each do |cmd|
   tcmd << node['nc_tools'][cmd].merge(\
-    {'pa_name' => node['objsrv']['os_pa_name']}).merge(\
-    {'nc_act' => node['objsrv']['nc_act']}).merge(\
-    {'nc_pwd' => node['objsrv']['nc_pwd']})
+    { 'pa_name' => node['objsrv']['os_pa_name'] }).merge(\
+    { 'nc_act' => node['objsrv']['nc_act'] }).merge(\
+    { 'nc_pwd' => node['objsrv']['nc_pwd'] })
 end
 
 template "#{node['objsrv']['nc_home']}/ncprofile-c" do
