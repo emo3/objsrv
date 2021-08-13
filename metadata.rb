@@ -4,7 +4,7 @@ maintainer_email 'bogus@gmail.com'
 chef_version '>= 13.0'
 license 'Apache-2.0'
 description 'Installs/Configures objsrv'
-version '0.6.0'
+version '0.6.1'
 supports 'redhat'
 supports 'centos'
 
