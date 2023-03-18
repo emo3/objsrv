@@ -17,3 +17,7 @@ cookbook 'objsrv',       path: '.'
 cookbook 'nc_base',      git: 'https://github.com/emo3/nc_base.git'
 cookbook 'nc_tools',     git: 'https://github.com/emo3/nc_tools.git'
 cookbook 'server_utils', git: 'https://github.com/emo3/server_utils.git'
+
+# Override variables in nc_base
+override['nc_base']['fp_ver'] = '25'
+override['nc_base']['fp_rel'] = '5.50.96.20210309_2049'

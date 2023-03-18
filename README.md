@@ -84,8 +84,14 @@ Todo: Add a description or purpose for this resource. What does it do?
 
 #### Actions
 
-* `:do_something`: Description of this action
-* `:another_action`: Description of this action
+To determine the values for:
+override['nc_base']['fp_ver'] = '25'
+override['nc_base']['fp_rel'] = '5.50.96.20210309_2049'
+Extract OMNIbuxCore zip file and navigate to
+8.1.0-TIV-OMNIbusCore-linux-x86_64-FP0025/OMNIbusRepository/composite
+look at file repository.xml and find
+PLATFORMS_com.ibm.tivoli.omnibus.core after '~' will be the value for fp_rel
+%offering.display.name the last octet will be the value for fp_ver
 
 #### Properties
 
