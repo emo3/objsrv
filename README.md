@@ -28,7 +28,6 @@ The following environmental variables must be defined:<br>
 
 depends 'nc_base'
 depends 'nc_tools'
-depends 'server_utils'
 
 ## Usage
 
