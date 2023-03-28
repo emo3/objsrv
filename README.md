@@ -36,10 +36,10 @@ The following environmental variables must be defined:
 	chef_release - The version of chef client you want to use
 		This version must be avaliable
 
-Todo: This will be unique depending on how the cookbook is developed and the
-tools it provides to configure nodes. Here's a simple example of using a
-cookbook and it's recipe. You'll want to elaborate on your own steps and include
-any necessary steps like setting required attributes.
+On Mac to allow for X11 applications to work remotely:
+  Add the following to your run_list 'nc_base::add_x11'
+  Run XQuartz. Make sure you leave open xterm started by XQuartz.
+  ssh -X -o IdentitiesOnly=yes netcool@{ObjectServerBoxName}
 
 Place a dependency on the `objsrv` cookbook in your cookbook's
 `metadata.rb`.
