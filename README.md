@@ -28,7 +28,6 @@ The following environmental variables must be defined:<br>
 
 depends 'nc_base'
 depends 'nc_tools'
-depends 'server_utils'
 
 ## Usage
 
@@ -37,10 +36,10 @@ The following environmental variables must be defined:
 	chef_release - The version of chef client you want to use
 		This version must be avaliable
 
-Todo: This will be unique depending on how the cookbook is developed and the
-tools it provides to configure nodes. Here's a simple example of using a
-cookbook and it's recipe. You'll want to elaborate on your own steps and include
-any necessary steps like setting required attributes.
+On Mac to allow for X11 applications to work remotely:
+  Add the following to your run_list 'nc_base::add_x11'
+  Run XQuartz. Make sure you leave open xterm started by XQuartz.
+  ssh -X -o IdentitiesOnly=yes netcool@{ObjectServerBoxName}
 
 Place a dependency on the `objsrv` cookbook in your cookbook's
 `metadata.rb`.
@@ -84,8 +83,14 @@ Todo: Add a description or purpose for this resource. What does it do?
 
 #### Actions
 
-* `:do_something`: Description of this action
-* `:another_action`: Description of this action
+To determine the values for:
+override['nc_base']['fp_ver'] = '25'
+override['nc_base']['fp_rel'] = '5.50.96.20210309_2049'
+Extract OMNIbuxCore zip file and navigate to
+8.1.0-TIV-OMNIbusCore-linux-x86_64-FP0025/OMNIbusRepository/composite
+look at file repository.xml and find
+PLATFORMS_com.ibm.tivoli.omnibus.core after '~' will be the value for fp_rel
+%offering.display.name the last octet will be the value for fp_ver
 
 #### Properties
 

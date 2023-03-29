@@ -1,6 +1,6 @@
 # Install the Netcool tools defined between ()
 %w(jnetcool nco-g-jdbc nco-g-bmc-remedy nco-g-jdbc-reporting-scripts).each do |tool|
-  install_tool 'do OBS install tool' do
+  install_tool tool do
     tool_package node['nc_tools'][tool]['tool_package']
     tool_url node['nc_tools'][tool]['tool_url']
     tool_dir node['nc_tools'][tool]['tool_dir']
