@@ -15,9 +15,9 @@ run_list 'objsrv::make_nc_os', 'nc_base::add_x11'
 # Specify a custom source for a single cookbook:
 cookbook 'objsrv', path: '.'
 ## Use when you have to pushed to supermarket
-# cookbook 'nc_base', git: 'https://github.com/emo3/nc_base.git'
-# cookbook 'nc_tools', git: 'https://github.com/emo3/nc_tools.git'
-# cookbook 'server_utils', git: 'https://github.com/emo3/server_utils.git'
+cookbook 'nc_base', git: 'https://github.com/emo3/nc_base.git'
+cookbook 'nc_tools', git: 'https://github.com/emo3/nc_tools.git'
+cookbook 'server_utils', git: 'https://github.com/emo3/server_utils.git'
 ## Use when debugging local
 # cookbook 'nc_base', path: '~/chef/cookbooks/nc_base'
 # cookbook 'nc_tools', path: '~/chef/cookbooks/nc_tools'
